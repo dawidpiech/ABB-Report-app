@@ -1,21 +1,16 @@
-import ExpressConfig from "./express/express.config"
-import { Request, Response } from "express"
+import ExpressConfig from "./express/express.config";
+import dotenv from "dotenv";
 
-const app = ExpressConfig()
-const PORT = 3000;
+const app = ExpressConfig();
+
+dotenv.config();
 
 try {
-  app.listen(PORT, (): void => {
-    console.log(`Connected successfully on port ${PORT}`);
+  app.listen(process.env.PORT, (): void => {
+    console.log(
+      `Connected successfully! Server working on port ${process.env.PORT}`
+    );
   });
 } catch (error: any) {
-  console.error(`Error occured: ${error.message}`);
+  console.error(`Error occurred during server startup: ${error.message}`);
 }
-
-
-app.get("/", async (req: Request, res: Response): Promise<Response> => {
-    return res.status(200).send({
-      message: "Hello World!",
-    });
-});
-

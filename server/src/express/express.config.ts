@@ -1,8 +1,13 @@
-import express, { Application } from "express"
+import express, { Application } from "express";
+import requestsRoutes from "../routes/RequestsRoute";
 
 const ExpressConfig = (): Application => {
-  const app = express()
-  return app
-}
+  const app = express();
 
-export default ExpressConfig
+  //routes
+  app.use("/api", requestsRoutes);
+
+  return app;
+};
+
+export default ExpressConfig;
