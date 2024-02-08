@@ -3,8 +3,8 @@ import RequestsController from "../controllers/RequestsController";
 
 const requestsRoutes = Router();
 
-requestsRoutes.get("/requests", (req, res) => {
-  RequestsController.getListOfRequests(req, res);
+requestsRoutes.get("/requests", (req, res, next) => {
+  RequestsController.getListOfRequests(req, res, next);
 });
 
 requestsRoutes.get("/", (req, res) => {
