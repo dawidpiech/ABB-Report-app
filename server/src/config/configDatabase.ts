@@ -36,6 +36,7 @@ const requestsDbConfig: config = {
   options: {
     encrypt: true,
     trustServerCertificate: true,
+    requestTimeout: 60000,
   },
 };
 

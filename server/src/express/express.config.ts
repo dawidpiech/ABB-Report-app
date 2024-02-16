@@ -1,5 +1,6 @@
 import express, { Application, Request, Response, NextFunction } from "express";
-import requestsRoutes from "../routes/requestsRoute";
+import listOfRequestsRoutes from "../routes/listOfRequestsRoutes";
+import requestData from "../routes/requestDataRoutes";
 import { errorHandler } from "../middlewares/errorHandler";
 import { NotFoundError } from "../erros/NotFoundError";
 
@@ -7,7 +8,8 @@ const ExpressConfig = (): Application => {
   const app = express();
 
   //routes
-  app.use("/api", requestsRoutes);
+  app.use("/api/list", listOfRequestsRoutes);
+  app.use("/api/request", requestData);
 
   //catch all routes which have not been serviced
   app.all("*", (req: Request, res: Response, next: NextFunction) => {

@@ -1,5 +1,6 @@
 interface RequestsListQueryParams {
   id?: number | boolean;
+  sapCode?: string;
   companyName?: string;
   requestTitle?: string;
   requestorName?: string;
@@ -11,36 +12,52 @@ interface RequestsListQueryParams {
   requestClosedEndDate?: Date | boolean;
 }
 
-const ListOfRequestsQuery = (params: RequestsListQueryParams) => {
+const listOfRequestsQuery = (params: RequestsListQueryParams) => {
   const conditions: string[] = [];
 
+  // Condition for request ID
   if (params.id !== undefined) {
-    conditions.push(`RequestID = ${params.id}`);
+    conditions.push(`R.RequestID = ${params.id}`);
   }
 
+  // Condition for restor name
+  if (params.sapCode !== undefined) {
+    conditions.push(
+      `R.FormData.value('(/FormData/Field[@ID="REQUEST_DECISION_SAP_SYSTEM"]/Value/node())[1]','varchar(250)') LIKE '${params.sapCode}'`
+    );
+  }
+
+  // Condition for restor name
   if (params.requestorName !== undefined) {
-    conditions.push(`RequestorName LIKE '%${params.requestorName}%'`);
+    conditions.push(`U.DisplayName LIKE '%${params.requestorName}%'`);
   }
 
+  // Condition for requestor e-mail
   if (params.email !== undefined) {
-    conditions.push(`RequestorEmail LIKE '%${params.email}%'`);
+    conditions.push(`U.EMail LIKE '%${params.email}%'`);
   }
 
+  // Condition for company name
   if (params.companyName !== undefined) {
-    conditions.push(`CompanyName LIKE '%${params.companyName}%'`);
+    conditions.push(
+      `R.FormData.value('(/FormData/Field[@ID="MD_ADDR1_DATA__NAME1"]/Value/node())[1]','varchar(250)') LIKE '%${params.companyName}%'`
+    );
   }
 
+  // Condition for request title
   if (params.requestTitle !== undefined) {
-    conditions.push(`RequestTitle LIKE '%${params.requestTitle}%'`);
+    conditions.push(
+      `R.FormData.value('(/FormData/Field[@ID="REQUEST_DATA_REQUEST_TITLE"]/Value/node())[1]','varchar(250)') LIKE '%${params.requestTitle}%'`
+    );
   }
 
-  // Warunek dla daty otwarcia
+  // Condition for request opening date
   if (
     params.requestOpenedStartDate !== undefined &&
     params.requestOpenedEndDate !== undefined
   ) {
     conditions.push(
-      `OpenedAt ${
+      `R.OpenedAt ${
         params.requestOpenedStartDate && params.requestOpenedEndDate
           ? "BETWEEN"
           : params.requestOpenedStartDate
@@ -54,13 +71,13 @@ const ListOfRequestsQuery = (params: RequestsListQueryParams) => {
     );
   }
 
-  // Warunek dla daty zamknięcia
+  // Condition for request closed date
   if (
     params.requestClosedStartDate !== undefined &&
     params.requestClosedEndDate !== undefined
   ) {
     conditions.push(
-      `OpenedAt ${
+      `R.ClosedAt ${
         params.requestClosedStartDate !== undefined &&
         params.requestClosedEndDate !== undefined
           ? "BETWEEN"
@@ -76,7 +93,7 @@ const ListOfRequestsQuery = (params: RequestsListQueryParams) => {
   }
 
   const whereClause =
-    conditions.length > 0 ? `AND ${conditions.join(" AND ")}` : "";
+    conditions.length > 0 ? `WHERE ${conditions.join(" AND ")}` : "";
 
   const listOfRequestsQuery = `WITH Records AS (
       SELECT 
@@ -86,6 +103,7 @@ const ListOfRequestsQuery = (params: RequestsListQueryParams) => {
         W.NodeName AS WorkflowName,
         R.FormData.value('(/FormData/Field[@ID="REQUEST_DATA_REQUEST_TITLE"]/Value/node())[1]','varchar(250)') AS RequestTitle,
         R.FormData.value('(/FormData/Field[@ID="MD_ADDR1_DATA__NAME1"]/Value/node())[1]','varchar(250)') AS CompanyName,
+        R.FormData.value('(/FormData/Field[@ID="REQUEST_DECISION_SAP_SYSTEM"]/Value/node())[1]','varchar(250)') AS SAPCode,
         U.DisplayName AS RequestorName,
         U.EMail AS RequestorEmail,
         R.FinalStatus AS RequestStatus,
@@ -93,15 +111,17 @@ const ListOfRequestsQuery = (params: RequestsListQueryParams) => {
         R.ClosedAt
       FROM 
         WorkflowRuntime.Request R
-      INNER JOIN 
+      LEFT JOIN 
         ApplicationAdministration.[User] U ON R.OpenedBy = U.ID
-      INNER JOIN 
+      LEFT JOIN 
         WorkflowSpecification.WorkflowTree W ON R.WorkflowID = W.NodeID
+      ${whereClause}
       )
       SELECT
         ID,
         RequestID,
         WorkflowTypeID,
+        SAPCode,
         WorkflowName,
         RequestTitle,
         CompanyName,
@@ -113,9 +133,133 @@ const ListOfRequestsQuery = (params: RequestsListQueryParams) => {
         Records
       WHERE 
         ID BETWEEN ${params.page * 100 - 100} AND ${params.page * 100}
-        ${whereClause}
       ORDER BY RequestID ASC`;
   return listOfRequestsQuery;
 };
 
-export { ListOfRequestsQuery, RequestsListQueryParams };
+//The function responsible for get SAP Country codes
+const listOfSapCodes = () => {
+  const listOfSapCodesQuery = `
+    SELECT CountryID,
+       CountryName
+    FROM CustomerSpecific.OrganizationCountry`;
+
+  return listOfSapCodesQuery;
+};
+
+//The function responsible for get list of workflows
+const listOfWorkflows = () => {
+  const listOfWorkflowsQuery = `
+    SELECT WorkflowID,
+       NodeName
+    FROM WorkflowSpecification.WorkflowTree
+    WHERE WorkflowID IS NOT NULL`;
+
+  return listOfWorkflowsQuery;
+};
+
+//The function responsible for get count of requests
+const countRequestsQuery = (params: RequestsListQueryParams) => {
+  const conditions: string[] = [];
+
+  // Condition for request ID
+  if (params.id !== undefined) {
+    conditions.push(`R.RequestID = ${params.id}`);
+  }
+
+  // Condition for restor name
+  if (params.sapCode !== undefined) {
+    conditions.push(
+      `R.FormData.value('(/FormData/Field[@ID="REQUEST_DECISION_SAP_SYSTEM"]/Value/node())[1]','varchar(250)') LIKE '${params.sapCode}'`
+    );
+  }
+
+  // Condition for restor name
+  if (params.requestorName !== undefined) {
+    conditions.push(`U.DisplayName LIKE '%${params.requestorName}%'`);
+  }
+
+  // Condition for requestor e-mail
+  if (params.email !== undefined) {
+    conditions.push(`U.EMail LIKE '%${params.email}%'`);
+  }
+
+  // Condition for company name
+  if (params.companyName !== undefined) {
+    conditions.push(
+      `R.FormData.value('(/FormData/Field[@ID="MD_ADDR1_DATA__NAME1"]/Value/node())[1]','varchar(250)') LIKE '%${params.companyName}%'`
+    );
+  }
+
+  // Condition for request title
+  if (params.requestTitle !== undefined) {
+    conditions.push(
+      `R.FormData.value('(/FormData/Field[@ID="REQUEST_DATA_REQUEST_TITLE"]/Value/node())[1]','varchar(250)') LIKE '%${params.requestTitle}%'`
+    );
+  }
+
+  // Condition for request opening date
+  if (
+    params.requestOpenedStartDate !== undefined &&
+    params.requestOpenedEndDate !== undefined
+  ) {
+    conditions.push(
+      `R.OpenedAt ${
+        params.requestOpenedStartDate && params.requestOpenedEndDate
+          ? "BETWEEN"
+          : params.requestOpenedStartDate
+          ? ">="
+          : "<="
+      } '${params.requestOpenedStartDate}'${
+        params.requestOpenedEndDate
+          ? ` AND '${params.requestOpenedEndDate}'`
+          : ""
+      }`
+    );
+  }
+
+  // Condition for request closed date
+  if (
+    params.requestClosedStartDate !== undefined &&
+    params.requestClosedEndDate !== undefined
+  ) {
+    conditions.push(
+      `R.ClosedAt ${
+        params.requestClosedStartDate !== undefined &&
+        params.requestClosedEndDate !== undefined
+          ? "BETWEEN"
+          : params.requestClosedStartDate
+          ? ">="
+          : "<="
+      } '${params.requestClosedStartDate}'${
+        params.requestClosedEndDate
+          ? ` AND '${params.requestClosedEndDate}'`
+          : ""
+      }`
+    );
+  }
+
+  const whereClause =
+    conditions.length > 0 ? `WHERE ${conditions.join(" AND ")}` : "";
+
+  const countRequestsQuery = `
+    SELECT
+      COUNT(R.RequestID) AS COUNT
+    FROM
+      WorkflowRuntime.Request R
+    LEFT JOIN
+      ApplicationAdministration.[User] U ON R.OpenedBy = U.ID
+    LEFT JOIN
+      WorkflowSpecification.WorkflowTree W ON R.WorkflowID = W.NodeID
+    ${whereClause}`;
+
+  return countRequestsQuery;
+};
+
+export {
+  listOfRequestsQuery,
+  RequestsListQueryParams,
+  listOfSapCodes,
+  listOfWorkflows,
+  countRequestsQuery,
+};
