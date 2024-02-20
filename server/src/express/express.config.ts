@@ -3,9 +3,12 @@ import listOfRequestsRoutes from "../routes/listOfRequestsRoutes";
 import requestData from "../routes/requestDataRoutes";
 import { errorHandler } from "../middlewares/errorHandler";
 import { NotFoundError } from "../erros/NotFoundError";
+import bodyParser from "body-parser";
 
 const ExpressConfig = (): Application => {
   const app = express();
+
+  app.use(bodyParser.json());
 
   //routes
   app.use("/api/list", listOfRequestsRoutes);

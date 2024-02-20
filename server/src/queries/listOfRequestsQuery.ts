@@ -1,11 +1,10 @@
 interface RequestsListQueryParams {
-  id?: number | boolean;
+  id?: number;
   sapCode?: string;
-  companyName?: string;
-  requestTitle?: string;
   requestorName?: string;
   email?: string;
   page: number;
+  workflowType?: number;
   requestOpenedStartDate?: Date | boolean;
   requestOpenedEndDate?: Date | boolean;
   requestClosedStartDate?: Date | boolean;
@@ -18,6 +17,11 @@ const listOfRequestsQuery = (params: RequestsListQueryParams) => {
   // Condition for request ID
   if (params.id !== undefined) {
     conditions.push(`R.RequestID = ${params.id}`);
+  }
+
+  // Condition for type of workflow
+  if (params.workflowType !== undefined) {
+    conditions.push(`R.WorkflowID = ${params.workflowType}`);
   }
 
   // Condition for restor name
@@ -35,20 +39,6 @@ const listOfRequestsQuery = (params: RequestsListQueryParams) => {
   // Condition for requestor e-mail
   if (params.email !== undefined) {
     conditions.push(`U.EMail LIKE '%${params.email}%'`);
-  }
-
-  // Condition for company name
-  if (params.companyName !== undefined) {
-    conditions.push(
-      `R.FormData.value('(/FormData/Field[@ID="MD_ADDR1_DATA__NAME1"]/Value/node())[1]','varchar(250)') LIKE '%${params.companyName}%'`
-    );
-  }
-
-  // Condition for request title
-  if (params.requestTitle !== undefined) {
-    conditions.push(
-      `R.FormData.value('(/FormData/Field[@ID="REQUEST_DATA_REQUEST_TITLE"]/Value/node())[1]','varchar(250)') LIKE '%${params.requestTitle}%'`
-    );
   }
 
   // Condition for request opening date
@@ -101,7 +91,6 @@ const listOfRequestsQuery = (params: RequestsListQueryParams) => {
         R.RequestID,
         R.WorkflowID AS WorkflowTypeID,
         W.NodeName AS WorkflowName,
-        R.FormData.value('(/FormData/Field[@ID="REQUEST_DATA_REQUEST_TITLE"]/Value/node())[1]','varchar(250)') AS RequestTitle,
         R.FormData.value('(/FormData/Field[@ID="MD_ADDR1_DATA__NAME1"]/Value/node())[1]','varchar(250)') AS CompanyName,
         R.FormData.value('(/FormData/Field[@ID="REQUEST_DECISION_SAP_SYSTEM"]/Value/node())[1]','varchar(250)') AS SAPCode,
         U.DisplayName AS RequestorName,
@@ -123,7 +112,6 @@ const listOfRequestsQuery = (params: RequestsListQueryParams) => {
         WorkflowTypeID,
         SAPCode,
         WorkflowName,
-        RequestTitle,
         CompanyName,
         RequestorName,
         RequestorEmail,
@@ -167,6 +155,11 @@ const countRequestsQuery = (params: RequestsListQueryParams) => {
     conditions.push(`R.RequestID = ${params.id}`);
   }
 
+  // Condition for type of workflow
+  if (params.workflowType !== undefined) {
+    conditions.push(`R.WorkflowID = ${params.workflowType}`);
+  }
+
   // Condition for restor name
   if (params.sapCode !== undefined) {
     conditions.push(
@@ -182,20 +175,6 @@ const countRequestsQuery = (params: RequestsListQueryParams) => {
   // Condition for requestor e-mail
   if (params.email !== undefined) {
     conditions.push(`U.EMail LIKE '%${params.email}%'`);
-  }
-
-  // Condition for company name
-  if (params.companyName !== undefined) {
-    conditions.push(
-      `R.FormData.value('(/FormData/Field[@ID="MD_ADDR1_DATA__NAME1"]/Value/node())[1]','varchar(250)') LIKE '%${params.companyName}%'`
-    );
-  }
-
-  // Condition for request title
-  if (params.requestTitle !== undefined) {
-    conditions.push(
-      `R.FormData.value('(/FormData/Field[@ID="REQUEST_DATA_REQUEST_TITLE"]/Value/node())[1]','varchar(250)') LIKE '%${params.requestTitle}%'`
-    );
   }
 
   // Condition for request opening date

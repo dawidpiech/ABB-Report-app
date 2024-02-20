@@ -25,24 +25,25 @@ class RequestsListController {
     next: NextFunction
   ): Promise<void> {
     const params: RequestsListQueryParams = {
-      id: req.query.id ? validateNumberParam(req.query.id) : undefined,
-      requestorName: req.query.requestorName as string | undefined,
-      sapCode: req.query.sapCode as string | undefined,
-      companyName: req.query.companyName as string | undefined,
-      requestTitle: req.query.requestTitle as string | undefined,
-      email: req.query.email as string | undefined,
-      page: req.query.page ? validateNumberParam(req.query.page) : 1,
-      requestOpenedStartDate: req.query.requestOpenedStartDate
-        ? validateDateParam(req.query.requestOpenedStartDate)
+      id: req.body.id ? validateNumberParam(req.body.id) : undefined,
+      requestorName: req.body.requestorName as string | undefined,
+      sapCode: req.body.sapCode as string | undefined,
+      email: req.body.email as string | undefined,
+      page: req.body.page ? validateNumberParam(req.body.page) : 1,
+      workflowType: req.body.workflowType
+        ? validateNumberParam(req.body.workflowType)
         : undefined,
-      requestOpenedEndDate: req.query.requestOpenedEndDate
-        ? validateDateParam(req.query.requestOpenedEndDate)
+      requestOpenedStartDate: req.body.requestOpenedStartDate
+        ? validateDateParam(req.body.requestOpenedStartDate)
         : undefined,
-      requestClosedStartDate: req.query.requestClosedStartDate
-        ? validateDateParam(req.query.requestClosedStartDate)
+      requestOpenedEndDate: req.body.requestOpenedEndDate
+        ? validateDateParam(req.body.requestOpenedEndDate)
         : undefined,
-      requestClosedEndDate: req.query.requestClosedEndDate
-        ? validateDateParam(req.query.requestClosedEndDate)
+      requestClosedStartDate: req.body.requestClosedStartDate
+        ? validateDateParam(req.body.requestClosedStartDate)
+        : undefined,
+      requestClosedEndDate: req.body.requestClosedEndDate
+        ? validateDateParam(req.body.requestClosedEndDate)
         : undefined,
     };
 
