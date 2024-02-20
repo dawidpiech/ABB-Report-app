@@ -85,9 +85,7 @@ const listOfRequestsQuery = (params: RequestsListQueryParams) => {
   const whereClause =
     conditions.length > 0 ? `WHERE ${conditions.join(" AND ")}` : "";
 
-  const listOfRequestsQuery = `WITH Records AS (
-      SELECT 
-        ROW_NUMBER() OVER (ORDER BY R.RequestID ASC) AS ID,
+  const listOfRequestsQuery = `SELECT 
         R.RequestID,
         R.WorkflowID AS WorkflowTypeID,
         W.NodeName AS WorkflowName,
@@ -105,23 +103,10 @@ const listOfRequestsQuery = (params: RequestsListQueryParams) => {
       LEFT JOIN 
         WorkflowSpecification.WorkflowTree W ON R.WorkflowID = W.NodeID
       ${whereClause}
-      )
-      SELECT
-        ID,
-        RequestID,
-        WorkflowTypeID,
-        SAPCode,
-        WorkflowName,
-        CompanyName,
-        RequestorName,
-        RequestorEmail,
-        OpenedAt,
-        ClosedAt
-      FROM 
-        Records
-      WHERE 
-        ID BETWEEN ${params.page * 100 - 100} AND ${params.page * 100}
-      ORDER BY RequestID ASC`;
+      ORDER BY R.RequestID DESC
+      OFFSET ${params.page * 100 - 100} ROWS 
+      FETCH NEXT ${params.page * 100} ROWS ONLY;
+      `;
   return listOfRequestsQuery;
 };
 
@@ -221,16 +206,15 @@ const countRequestsQuery = (params: RequestsListQueryParams) => {
   const whereClause =
     conditions.length > 0 ? `WHERE ${conditions.join(" AND ")}` : "";
 
-  const countRequestsQuery = `
-    SELECT
-      COUNT(R.RequestID) AS COUNT
-    FROM
-      WorkflowRuntime.Request R
-    LEFT JOIN
-      ApplicationAdministration.[User] U ON R.OpenedBy = U.ID
-    LEFT JOIN
-      WorkflowSpecification.WorkflowTree W ON R.WorkflowID = W.NodeID
-    ${whereClause}`;
+  const countRequestsQuery = `SELECT 
+        COUNT(R.RequestID) AS COUNT
+      FROM 
+        WorkflowRuntime.Request R
+      LEFT JOIN 
+        ApplicationAdministration.[User] U ON R.OpenedBy = U.ID
+      LEFT JOIN 
+        WorkflowSpecification.WorkflowTree W ON R.WorkflowID = W.NodeID
+      ${whereClause}`;
 
   return countRequestsQuery;
 };
