@@ -26,9 +26,11 @@ class RequestsListController {
   ): Promise<void> {
     const params: RequestsListQueryParams = {
       id: req.body.id ? validateNumberParam(req.body.id) : undefined,
-      requestorName: req.body.requestorName as string | undefined,
-      sapCode: req.body.sapCode as string | undefined,
-      email: req.body.email as string | undefined,
+      requestorName: req.body.requestorName
+        ? (req.body.requestorName as string)
+        : undefined,
+      sapCode: req.body.sapCode ? (req.body.sapCode as string) : undefined,
+      email: req.body.email ? (req.body.email as string) : undefined,
       page: req.body.page ? validateNumberParam(req.body.page) : 1,
       workflowType: req.body.workflowType
         ? validateNumberParam(req.body.workflowType)
