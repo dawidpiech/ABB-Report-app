@@ -46,6 +46,9 @@ devDependencies:
   express:
     specifier: ^4.18.2
     version: 4.18.2
+  fast-xml-parser:
+    specifier: ^4.3.4
+    version: 4.3.4
   ts-node-dev:
     specifier: ^2.0.0
     version: 2.0.0(@types/node@17.0.45)(typescript@4.9.5)
@@ -850,6 +853,13 @@ packages:
       vary: 1.1.2
     transitivePeerDependencies:
       - supports-color
+    dev: true
+
+  /fast-xml-parser@4.3.4:
+    resolution: {integrity: sha512-utnwm92SyozgA3hhH2I8qldf2lBqm6qHOICawRNRFu1qMe3+oqr+GcXjGqTmXTMGE5T4eC03kr/rlh5C1IRdZA==}
+    hasBin: true
+    dependencies:
+      strnum: 1.0.5
     dev: true
 
   /fecha@4.2.3:
@@ -1765,6 +1775,10 @@ packages:
   /strip-json-comments@2.0.1:
     resolution: {integrity: sha512-4gB8na07fecVVkOI6Rs4e7T6NOTki5EmL7TUduTs6bu3EdnSycntVJ4re8kgZA+wx9IueI2Y11bfbgwtzuE0KQ==}
     engines: {node: '>=0.10.0'}
+    dev: true
+
+  /strnum@1.0.5:
+    resolution: {integrity: sha512-J8bbNyKKXl5qYcR36TIO8W3mVGVHrmmxsd5PAItGkmyzwJvybiw2IVq5nqd0i4LSNSkB/sx9VHllbfFdr9k1JA==}
     dev: true
 
   /supports-preserve-symlinks-flag@1.0.0:
