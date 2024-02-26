@@ -37,7 +37,8 @@ const requestDataQuery = (params: RequestDataParams) => {
   const requestDataQuery = `
     SELECT R.RequestID,
 	    W.FormSpecification,
-      R.FormData
+      R.FormData,
+      R.InitialFormData
     FROM WorkflowRuntime.Request R
     INNER JOIN WorkflowSpecification.Workflow W ON R.WorkflowID = W.WorkflowID AND R.WorkflowVariantID = W.WorkflowVariantID 
     ${whereClause}
@@ -88,12 +89,14 @@ const requestDataOnStepsQuery = (params: RequestDataOnStepParams) => {
     conditions.length > 0 ? `WHERE ${conditions.join(" AND ")}` : "";
 
   const requestDataOnStepsQuery = `
-    SELECT R.RequestID,
+    SELECT
 	  W.FormSpecification,
-	  R.FormDataEnd
+	  R.FormDataEnd,
+	  R2.InitialFormData
     FROM WorkflowRuntime.RequestActivity R
-    INNER JOIN WorkflowSpecification.Workflow W ON R.ControlData.value('(/ControlData/WorkflowID/node())[1]','varchar(250)') = W.WorkflowID 
+    LEFT JOIN WorkflowSpecification.Workflow W ON R.ControlData.value('(/ControlData/WorkflowID/node())[1]','varchar(250)') = W.WorkflowID 
       AND R.ControlData.value('(/ControlData/WorkflowVariantID/node())[1]','varchar(250)') = W.WorkflowVariantID 
+    LEFT JOIN WorkflowRuntime.Request R2 ON R.RequestID = R2.RequestID
 	  ${whereClause}
     ORDER BY R.RequestID ASC`;
   return requestDataOnStepsQuery;
