@@ -50,7 +50,8 @@ class RequestController {
 
       const result = await convertToJSON(
         request[0].FormSpecification,
-        request[0].FormData
+        request[0].FormData,
+        request[0].InitialFormData
       );
       res.status(200).json(result);
     } catch (error) {
@@ -146,7 +147,8 @@ class RequestController {
 
       const result = await convertToJSON(
         request[0].FormSpecification,
-        request[0].FormDataEnd
+        request[0].FormDataEnd,
+        request[0].InitialFormData
       );
       res.status(200).json(result);
     } catch (error) {
@@ -186,12 +188,8 @@ class RequestController {
       const queryResult = await requestsDatabasePool.query(
         requestListOfFilesQuery(params)
       );
-      const request = queryResult.recordset;
+      const result = queryResult.recordset;
 
-      const result = await convertToJSON(
-        request[0].FormSpecification,
-        request[0].FormDataEnd
-      );
       res.status(200).json(result);
     } catch (error) {
       next(error);
