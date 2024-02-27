@@ -47,18 +47,12 @@ const listOfRequestsQuery = (params: RequestsListQueryParams) => {
     params.requestOpenedEndDate !== undefined
   ) {
     conditions.push(
-      `R.OpenedAt ${
-        params.requestOpenedStartDate && params.requestOpenedEndDate
-          ? "BETWEEN"
-          : params.requestOpenedStartDate
-          ? ">="
-          : "<="
-      } '${params.requestOpenedStartDate}'${
-        params.requestOpenedEndDate
-          ? ` AND '${params.requestOpenedEndDate}'`
-          : ""
-      }`
+      `R.OpenedAt BETWEEN '${params.requestOpenedStartDate}' AND '${params.requestOpenedEndDate}'`
     );
+  } else if (params.requestOpenedStartDate !== undefined) {
+    conditions.push(`R.OpenedAt > '${params.requestOpenedStartDate}'`);
+  } else if (params.requestOpenedEndDate !== undefined) {
+    conditions.push(`R.OpenedAt < '${params.requestOpenedEndDate}'`);
   }
 
   // Condition for request closed date
@@ -67,19 +61,12 @@ const listOfRequestsQuery = (params: RequestsListQueryParams) => {
     params.requestClosedEndDate !== undefined
   ) {
     conditions.push(
-      `R.ClosedAt ${
-        params.requestClosedStartDate !== undefined &&
-        params.requestClosedEndDate !== undefined
-          ? "BETWEEN"
-          : params.requestClosedStartDate
-          ? ">="
-          : "<="
-      } '${params.requestClosedStartDate}'${
-        params.requestClosedEndDate
-          ? ` AND '${params.requestClosedEndDate}'`
-          : ""
-      }`
+      `R.ClosedAt BETWEEN '${params.requestClosedStartDate}' AND '${params.requestClosedEndDate}'`
     );
+  } else if (params.requestClosedStartDate !== undefined) {
+    conditions.push(`R.ClosedAt > '${params.requestClosedStartDate}'`);
+  } else if (params.requestClosedEndDate !== undefined) {
+    conditions.push(`R.ClosedAt < '${params.requestClosedEndDate}'`);
   }
 
   const whereClause =
@@ -107,6 +94,7 @@ const listOfRequestsQuery = (params: RequestsListQueryParams) => {
       OFFSET ${params.page * 100 - 100} ROWS 
       FETCH NEXT ${params.page * 100} ROWS ONLY;
       `;
+
   return listOfRequestsQuery;
 };
 
@@ -168,18 +156,12 @@ const countRequestsQuery = (params: RequestsListQueryParams) => {
     params.requestOpenedEndDate !== undefined
   ) {
     conditions.push(
-      `R.OpenedAt ${
-        params.requestOpenedStartDate && params.requestOpenedEndDate
-          ? "BETWEEN"
-          : params.requestOpenedStartDate
-          ? ">="
-          : "<="
-      } '${params.requestOpenedStartDate}'${
-        params.requestOpenedEndDate
-          ? ` AND '${params.requestOpenedEndDate}'`
-          : ""
-      }`
+      `R.OpenedAt BETWEEN '${params.requestOpenedStartDate}' AND '${params.requestOpenedEndDate}'`
     );
+  } else if (params.requestOpenedStartDate !== undefined) {
+    conditions.push(`R.OpenedAt > '${params.requestOpenedStartDate}'`);
+  } else if (params.requestOpenedEndDate !== undefined) {
+    conditions.push(`R.OpenedAt < '${params.requestOpenedEndDate}'`);
   }
 
   // Condition for request closed date
@@ -188,19 +170,12 @@ const countRequestsQuery = (params: RequestsListQueryParams) => {
     params.requestClosedEndDate !== undefined
   ) {
     conditions.push(
-      `R.ClosedAt ${
-        params.requestClosedStartDate !== undefined &&
-        params.requestClosedEndDate !== undefined
-          ? "BETWEEN"
-          : params.requestClosedStartDate
-          ? ">="
-          : "<="
-      } '${params.requestClosedStartDate}'${
-        params.requestClosedEndDate
-          ? ` AND '${params.requestClosedEndDate}'`
-          : ""
-      }`
+      `R.ClosedAt BETWEEN '${params.requestClosedStartDate}' AND '${params.requestClosedEndDate}'`
     );
+  } else if (params.requestClosedStartDate !== undefined) {
+    conditions.push(`R.ClosedAt > '${params.requestClosedStartDate}'`);
+  } else if (params.requestClosedEndDate !== undefined) {
+    conditions.push(`R.ClosedAt < '${params.requestClosedEndDate}'`);
   }
 
   const whereClause =
