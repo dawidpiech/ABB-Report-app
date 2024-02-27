@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { FooterWrapper } from "./Footer.styles";
 
-export function Footer() {
+export const Footer = () => {
   return (
     <FooterWrapper>
       <p>
@@ -13,4 +13,4 @@ export function Footer() {
       </p>
     </FooterWrapper>
   );
-}
+};
