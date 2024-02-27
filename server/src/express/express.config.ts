@@ -4,9 +4,19 @@ import requestData from "../routes/requestDataRoutes";
 import { errorHandler } from "../middlewares/errorHandler";
 import { NotFoundError } from "../erros/NotFoundError";
 import bodyParser from "body-parser";
+import cors from "cors";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const ExpressConfig = (): Application => {
   const app = express();
+
+  var corsOptions = {
+    origin: process.env.FRONTEND_URL,
+    optionsSuccessStatus: 200,
+  };
+  app.use(cors(corsOptions));
 
   app.use(bodyParser.json());
 
