@@ -1,9 +1,23 @@
-import { LoadingSpinnerWrapper } from "./LoadingSpinner.styles";
+import {
+  LoadingSpinnerAnimation,
+  LoadingSpinnerWrapper,
+  ABBLogo,
+  LoadingSpinnerWrapperInner,
+} from "./LoadingSpinner.styles";
+import ABBLogoSrc from "../../assets/ABB_logo.svg";
 
 interface LoadingSpinnerProps {
-  children: React.ReactNode;
+  version?: string;
+  zindex?: number;
 }
 
-export const LoadingSpinner = ({ children }: LoadingSpinnerProps) => {
-  return <LoadingSpinnerWrapper>{children}</LoadingSpinnerWrapper>;
+export const LoadingSpinner = ({ version, zindex }: LoadingSpinnerProps) => {
+  return (
+    <LoadingSpinnerWrapper zindex={zindex} version={version}>
+      <LoadingSpinnerWrapperInner>
+        <ABBLogo src={ABBLogoSrc} alt="ABB logo" />
+        <LoadingSpinnerAnimation />
+      </LoadingSpinnerWrapperInner>
+    </LoadingSpinnerWrapper>
+  );
 };

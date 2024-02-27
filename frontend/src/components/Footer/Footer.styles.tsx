@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const FooterWrapper = styled.div`
+export const FooterWrapper = styled.footer`
   width: 100%;
   height: 60px;
   background-color: ${({ theme }) => theme.colors.white};

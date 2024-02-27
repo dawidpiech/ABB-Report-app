@@ -7,6 +7,7 @@ interface ButtonProps {
   color?: string;
   display?: string;
   alignitems?: string;
+  disabled: boolean;
 }
 
 export const Button = ({
@@ -15,10 +16,13 @@ export const Button = ({
   children,
   display,
   alignitems,
+  disabled,
 }: ButtonProps) => {
   return (
     <FieldWrapper width={width} display={display} alignitems={alignitems}>
-      <StyledButton color={color}>{children}</StyledButton>
+      <StyledButton color={color} disabled={disabled}>
+        {children}
+      </StyledButton>
     </FieldWrapper>
   );
 };

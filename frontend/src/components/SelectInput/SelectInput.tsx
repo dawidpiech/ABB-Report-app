@@ -1,6 +1,6 @@
-import React, { ChangeEvent } from "react";
+import { ChangeEvent } from "react";
 import { FieldWrapper } from "../FieldWrapper/FieldWrapper";
-import { StyledSelect } from "./SelectInput.styles";
+import { StyledOption, StyledSelect } from "./SelectInput.styles";
 import { Label } from "../Label/Label";
 
 interface SelectInputProps {
@@ -11,24 +11,25 @@ interface SelectInputProps {
   onChange: (e: ChangeEvent<HTMLSelectElement>) => void;
 }
 
-export const SelectInput: React.FC<SelectInputProps> = ({
+export const SelectInput = ({
   label,
   options,
   value,
   onChange,
   width,
-}) => {
+}: SelectInputProps) => {
   return (
     <FieldWrapper width={width}>
       <Label>{label}</Label>
       <StyledSelect value={value} onChange={onChange}>
-        <option value={""} disabled hidden>
+        <StyledOption key="disabled" value={""} disabled hidden>
           {`Select ${label}`}
-        </option>
+        </StyledOption>
+        <StyledOption key="" value={""}></StyledOption>
         {Object.entries(options).map(([key, value]) => (
-          <option key={key} value={key}>
+          <StyledOption key={key} value={key}>
             {value}
-          </option>
+          </StyledOption>
         ))}
       </StyledSelect>
     </FieldWrapper>

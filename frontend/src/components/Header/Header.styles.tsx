@@ -6,7 +6,7 @@ export const ABBLogo = styled.img`
   margin-left: 60px;
 `;
 
-export const HeaderWrapper = styled.footer`
+export const HeaderWrapper = styled.header`
   width: 100%;
   height: 80px;
   background-color: ${({ theme }) => theme.colors.white};

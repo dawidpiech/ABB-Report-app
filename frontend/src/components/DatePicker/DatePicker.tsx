@@ -1,13 +1,17 @@
-import React, { ChangeEvent } from "react";
-import { StyledDatePicker } from "./DatePicker.styles";
+import { ChangeEvent, HTMLProps } from "react";
+import { StyledDatePicker, StyledDatePickerWrapper } from "./DatePicker.styles";
 import { Label } from "../Label/Label";
 import { FieldWrapper } from "../FieldWrapper/FieldWrapper";
+import CalendarIcon from "../../assets/calendar.svg";
 
 interface DatePickerProps {
   label: string;
-  value: string;
+  value: Date | null;
   width?: number;
-  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
+  onChange: (
+    date: Date | [Date | null, Date | null] | null,
+    event: ChangeEvent<HTMLInputElement>
+  ) => void;
 }
 
 export const DatePicker = ({
@@ -19,7 +23,15 @@ export const DatePicker = ({
   return (
     <FieldWrapper width={width}>
       <Label>{label}</Label>
-      <StyledDatePicker type="date" value={value} onChange={onChange} />
+      <StyledDatePickerWrapper>
+        <StyledDatePicker
+          selected={value ? new Date(value) : null}
+          onChange={onChange}
+          showIcon
+          icon={<img src={CalendarIcon} alt="SVG Icon" />}
+          isClearable={true}
+        />
+      </StyledDatePickerWrapper>
     </FieldWrapper>
   );
 };

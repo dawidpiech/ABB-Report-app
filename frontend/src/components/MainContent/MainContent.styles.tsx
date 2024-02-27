@@ -14,4 +14,6 @@ export const MainContentWrapperInner = styled.div`
   background-color: ${({ theme }) => theme.colors.white};
   display: flex;
   justify-content: left;
+  position: relative;
+  flex-direction: column;
 `;
