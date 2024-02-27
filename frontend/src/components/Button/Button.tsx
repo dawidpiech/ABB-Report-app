@@ -6,7 +6,7 @@ interface ButtonProps {
   width?: number;
   color?: string;
   display?: string;
-  alignItems?: string;
+  alignitems?: string;
 }
 
 export const Button = ({
@@ -14,10 +14,10 @@ export const Button = ({
   color,
   children,
   display,
-  alignItems,
+  alignitems,
 }: ButtonProps) => {
   return (
-    <FieldWrapper width={width} display={display} alignItems={alignItems}>
+    <FieldWrapper width={width} display={display} alignitems={alignitems}>
       <StyledButton color={color}>{children}</StyledButton>
     </FieldWrapper>
   );

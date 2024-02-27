@@ -18,7 +18,6 @@ export const SelectInput: React.FC<SelectInputProps> = ({
   onChange,
   width,
 }) => {
-  console.log(options);
   return (
     <FieldWrapper width={width}>
       <Label>{label}</Label>

@@ -6,19 +6,18 @@ import { useEffect, useState } from "react";
 import { FieldGroup } from "../FieldGroup/FieldGroup";
 import { SearchFormWrapper } from "./SearchForm.styles";
 import { Button } from "../Button/Button";
-import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { getListOfWorkflowTypes } from "../../api/getListOfWorkflowTypes";
+import { getListOfCountries } from "../../api/getListOfCountries";
+import { LoadingSpinner } from "../LoadingSpinner/LoadingSpinner";
 
-const countries: { [key: string]: string } = {
-  PL: "Poland",
-  US: "USA",
-  DE: "Germany",
-};
+export interface CountriesList {
+  [key: string]: string;
+}
 
-const workflowTypes: { [key: string]: string } = {
-  A: "Type A",
-  B: "Type B",
-  C: "Type C",
-};
+export interface WorkFlowTypesList {
+  [key: string]: string;
+}
 
 export const SearchForm = () => {
   const [requestId, setRequestId] = useState("");
@@ -33,16 +32,22 @@ export const SearchForm = () => {
   const [requestClosedStartDate, setRequestClosedStartDate] = useState("");
   const [requestClosedEndDate, setRequestClosedEndDate] = useState("");
   const [requestClosedDateError, setRequestClosedDateError] = useState("");
+  const [countries, setCountries] = useState<CountriesList>({});
+  const [workflowTypes, setWorkflowTypes] = useState<WorkFlowTypesList>({});
+  const [isLoading, setIsLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(
-          "http://localhost:3000/api/list/getListOfSapCountry"
-        );
-        console.log(response);
+        const countriesList = await getListOfCountries();
+        const workflowTypesList = await getListOfWorkflowTypes();
+
+        if (countriesList) setCountries(countriesList);
+        if (workflowTypesList) setWorkflowTypes(workflowTypesList);
+        setIsLoading(false);
       } catch (error) {
-        console.log("Błąd podczas pobierania danych z API", error);
+        console.error("Wystąpił błąd:", error);
       }
     };
 
@@ -98,9 +103,41 @@ export const SearchForm = () => {
 
   const onSubmit = (e: { preventDefault: () => void }) => {
     e.preventDefault();
+    const params: string[] = [];
+    if (requestId) {
+      params.push(`id=${requestId}`);
+    }
+    if (requestorName) {
+      params.push(`requestorName=${requestorName}`);
+    }
+    if (country.id) {
+      params.push(`country=${country.id}`);
+    }
+    if (email) {
+      params.push(`email=${email}`);
+    }
+    if (workflowType.id) {
+      params.push(`workflowType=${workflowType.id}`);
+    }
+    if (requestOpenedStartDate) {
+      params.push(`requestOpenedStartDate=${requestOpenedStartDate}`);
+    }
+    if (requestOpenedEndDate) {
+      params.push(`requestOpenedEndDate=${requestOpenedEndDate}`);
+    }
+    if (requestClosedStartDate) {
+      params.push(`requestClosedStartDate=${requestClosedStartDate}`);
+    }
+    if (requestClosedEndDate) {
+      params.push(`requestClosedEndDate=${requestClosedEndDate}`);
+    }
+
+    navigate(`/?${params.join("&")}`);
   };
 
-  return (
+  return isLoading ? (
+    <LoadingSpinner>fasdfsda</LoadingSpinner>
+  ) : (
     <SearchFormWrapper onSubmit={onSubmit}>
       <TextInput
         label="Request ID"
@@ -182,7 +219,7 @@ export const SearchForm = () => {
           }
         />
       </FieldGroup>
-      <Button width={20} display="flex" alignItems="flex-end">
+      <Button width={20} alignitems="flex-end" display="flex">
         Submit
       </Button>
     </SearchFormWrapper>

@@ -4,17 +4,17 @@ export interface FieldWrapperProps {
   children: React.ReactNode;
   width?: number;
   display?: string;
-  alignItems?: string;
+  alignitems?: string;
 }
 
 export const FieldWrapper = ({
   children,
   width,
   display,
-  alignItems,
+  alignitems,
 }: FieldWrapperProps) => {
   return (
-    <FieldWrapperBlock width={width} display={display} alignItems={alignItems}>
+    <FieldWrapperBlock width={width} display={display} alignitems={alignitems}>
       {children}
     </FieldWrapperBlock>
   );
