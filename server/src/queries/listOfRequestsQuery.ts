@@ -95,6 +95,8 @@ const listOfRequestsQuery = (params: RequestsListQueryParams) => {
       FETCH NEXT ${params.page * 100} ROWS ONLY;
       `;
 
+  console.log(listOfRequestsQuery);
+
   return listOfRequestsQuery;
 };
 
