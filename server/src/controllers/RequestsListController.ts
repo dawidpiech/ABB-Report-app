@@ -29,7 +29,7 @@ class RequestsListController {
       requestorName: req.query.requestorName
         ? (req.query.requestorName as string)
         : undefined,
-      sapCode: req.query.sapCode ? (req.query.sapCode as string) : undefined,
+      sapCode: req.query.country ? (req.query.country as string) : undefined,
       email: req.query.email ? (req.query.email as string) : undefined,
       page: req.query.page ? validateNumberParam(req.query.page) : 1,
       workflowType: req.query.workflowType
@@ -48,6 +48,8 @@ class RequestsListController {
         ? validateDateParam(req.query.requestClosedEndDate)
         : undefined,
     };
+
+    console.log(req.query);
 
     const validParameterStatus = areRequestsParamsValid(params);
 
