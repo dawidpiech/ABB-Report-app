@@ -13,8 +13,7 @@ import {
   areRequestsParamsValid,
 } from "../utils/validation";
 import { BadRequestError } from "../erros/BadRequestError";
-import sql from "mssql";
-import { requestsDbConfig } from "../config/configDatabase";
+import { queryRequestData } from "../config/configDatabase";
 
 dotenv.config();
 
@@ -60,15 +59,12 @@ class RequestsListController {
         );
       }
 
-      const pool = await sql.connect(requestsDbConfig);
-
-      const queryResult = await pool.query(listOfRequestsQuery(params));
-      const queryCount = await pool.query(countRequestsQuery(params));
+      const queryResult = await queryRequestData(listOfRequestsQuery(params));
+      const queryCount = await queryRequestData(countRequestsQuery(params));
 
       const requests = queryResult.recordset;
       const count = queryCount.recordset[0].COUNT;
 
-      pool.close();
       res.status(200).json({ count: count, requests: requests });
     } catch (error) {
       next(error);
@@ -81,11 +77,9 @@ class RequestsListController {
     next: NextFunction
   ): Promise<void> {
     try {
-      const pool = await sql.connect(requestsDbConfig);
-      const queryResult = await pool.query(listOfSapCodes());
+      const queryResult = await queryRequestData(listOfSapCodes());
       const requests = queryResult.recordset;
 
-      pool.close();
       res.status(200).json(requests);
     } catch (error) {
       next(error);
@@ -98,14 +92,14 @@ class RequestsListController {
     next: NextFunction
   ): Promise<void> {
     try {
-      const pool = await sql.connect(requestsDbConfig);
-      const queryResult = await pool.query(listOfWorkflows());
+      const queryResult = await queryRequestData(listOfWorkflows());
       const requests = queryResult.recordset;
 
-      pool.close();
       res.status(200).json(requests);
     } catch (error) {
-      next(error);
+      throw new BadRequestError(
+        `The request must have a correct File UUID value`
+      );
     }
   }
 }

@@ -14,10 +14,8 @@ import {
 import dotenv from "dotenv";
 import { validateNumberParam } from "../utils/validation";
 import { BadRequestError } from "../erros/BadRequestError";
-import { DatabaseError } from "../erros/DatabaseError";
 import { convertToJSON } from "../utils/convertXMLtoJSON";
-import sql from "mssql";
-import { fileDbConfig, requestsDbConfig } from "../config/configDatabase";
+import { queryRequestData, queryFileData } from "../config/configDatabase";
 
 dotenv.config();
 
@@ -39,9 +37,7 @@ class RequestController {
         );
       }
 
-      const pool = await sql.connect(requestsDbConfig);
-
-      const queryResult = await pool.query(requestDataQuery(params));
+      const queryResult = await queryRequestData(requestDataQuery(params));
       const request = queryResult.recordset;
 
       const result = await convertToJSON(
@@ -50,7 +46,6 @@ class RequestController {
         request[0].InitialFormData
       );
 
-      pool.close();
       res.status(200).json(result);
     } catch (error) {
       next(error);
@@ -74,12 +69,11 @@ class RequestController {
         );
       }
 
-      const pool = await sql.connect(requestsDbConfig);
-
-      const queryResult = await pool.query(listOfStepsRequestQuery(params));
+      const queryResult = await queryRequestData(
+        listOfStepsRequestQuery(params)
+      );
       const result = queryResult.recordset;
 
-      pool.close();
       res.status(200).json(result);
     } catch (error) {
       next(error);
@@ -111,9 +105,9 @@ class RequestController {
         );
       }
 
-      const pool = await sql.connect(requestsDbConfig);
-
-      const queryResult = await pool.query(requestDataOnStepsQuery(params));
+      const queryResult = await queryRequestData(
+        requestDataOnStepsQuery(params)
+      );
       const request = queryResult.recordset;
 
       const result = await convertToJSON(
@@ -122,7 +116,6 @@ class RequestController {
         request[0].InitialFormData
       );
 
-      pool.close();
       res.status(200).json(result);
     } catch (error) {
       next(error);
@@ -144,12 +137,11 @@ class RequestController {
         throw new BadRequestError(`The request must have a Request ID value`);
       }
 
-      const pool = await sql.connect(requestsDbConfig);
-
-      const queryResult = await pool.query(requestListOfFilesQuery(params));
+      const queryResult = await queryRequestData(
+        requestListOfFilesQuery(params)
+      );
       const result = queryResult.recordset;
 
-      pool.close();
       res.status(200).json(result);
     } catch (error) {
       next(error);
@@ -173,12 +165,11 @@ class RequestController {
         );
       }
 
-      const pool = await sql.connect(requestsDbConfig);
-
-      const queryResult = await pool.query(requestListOfFilesQuery(params));
+      const queryResult = await queryRequestData(
+        requestListOfFilesQuery(params)
+      );
       const result = queryResult.recordset;
 
-      pool.close();
       res.status(200).json(result);
     } catch (error) {
       next(error);
@@ -201,12 +192,9 @@ class RequestController {
         );
       }
 
-      const pool = await sql.connect(fileDbConfig);
-
-      const queryResult = await pool.query(requestGetFileQuery(params));
+      const queryResult = await queryFileData(requestGetFileQuery(params));
       const result = queryResult.recordset;
 
-      pool.close();
       res.status(200).json(result);
     } catch (error) {
       next(error);
