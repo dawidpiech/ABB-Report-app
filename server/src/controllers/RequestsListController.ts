@@ -1,5 +1,4 @@
 import { NextFunction, Request, Response } from "express";
-import { requestsDatabasePool } from "../config/configDatabase";
 import {
   countRequestsQuery,
   listOfRequestsQuery,
@@ -14,7 +13,8 @@ import {
   areRequestsParamsValid,
 } from "../utils/validation";
 import { BadRequestError } from "../erros/BadRequestError";
-import { DatabaseError } from "../erros/DatabaseError";
+import sql from "mssql";
+import { requestsDbConfig } from "../config/configDatabase";
 
 dotenv.config();
 
@@ -49,8 +49,6 @@ class RequestsListController {
         : undefined,
     };
 
-    console.log(req.query);
-
     const validParameterStatus = areRequestsParamsValid(params);
 
     try {
@@ -62,32 +60,18 @@ class RequestsListController {
         );
       }
 
-      await requestsDatabasePool.connect();
-      const queryResult = await requestsDatabasePool.query(
-        listOfRequestsQuery(params)
-      );
-      const queryCount = await requestsDatabasePool.query(
-        countRequestsQuery(params)
-      );
+      const pool = await sql.connect(requestsDbConfig);
+
+      const queryResult = await pool.query(listOfRequestsQuery(params));
+      const queryCount = await pool.query(countRequestsQuery(params));
 
       const requests = queryResult.recordset;
       const count = queryCount.recordset[0].COUNT;
 
+      pool.close();
       res.status(200).json({ count: count, requests: requests });
     } catch (error) {
       next(error);
-    } finally {
-      if (requestsDatabasePool) {
-        try {
-          if (requestsDatabasePool.connected) {
-            requestsDatabasePool.close();
-          }
-        } catch (error) {
-          throw new DatabaseError(
-            `An error occurred when closing the database connection.`
-          );
-        }
-      }
     }
   }
 
@@ -97,25 +81,14 @@ class RequestsListController {
     next: NextFunction
   ): Promise<void> {
     try {
-      await requestsDatabasePool.connect();
-      const queryResult = await requestsDatabasePool.query(listOfSapCodes());
+      const pool = await sql.connect(requestsDbConfig);
+      const queryResult = await pool.query(listOfSapCodes());
       const requests = queryResult.recordset;
 
+      pool.close();
       res.status(200).json(requests);
     } catch (error) {
       next(error);
-    } finally {
-      if (requestsDatabasePool) {
-        try {
-          if (requestsDatabasePool.connected) {
-            requestsDatabasePool.close();
-          }
-        } catch (error) {
-          throw new DatabaseError(
-            `An error occurred when closing the database connection.`
-          );
-        }
-      }
     }
   }
 
@@ -125,25 +98,14 @@ class RequestsListController {
     next: NextFunction
   ): Promise<void> {
     try {
-      await requestsDatabasePool.connect();
-      const queryResult = await requestsDatabasePool.query(listOfWorkflows());
+      const pool = await sql.connect(requestsDbConfig);
+      const queryResult = await pool.query(listOfWorkflows());
       const requests = queryResult.recordset;
 
+      pool.close();
       res.status(200).json(requests);
     } catch (error) {
       next(error);
-    } finally {
-      if (requestsDatabasePool) {
-        try {
-          if (requestsDatabasePool.connected) {
-            requestsDatabasePool.close();
-          }
-        } catch (error) {
-          throw new DatabaseError(
-            `An error occurred when closing the database connection.`
-          );
-        }
-      }
     }
   }
 }
