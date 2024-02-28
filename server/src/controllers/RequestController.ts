@@ -1,9 +1,5 @@
 import { NextFunction, Request, Response } from "express";
 import {
-  requestsDatabasePool,
-  fileDatabasePool,
-} from "../config/configDatabase";
-import {
   requestDataQuery,
   RequestDataParams,
   listOfStepsRequestQuery,
@@ -20,6 +16,8 @@ import { validateNumberParam } from "../utils/validation";
 import { BadRequestError } from "../erros/BadRequestError";
 import { DatabaseError } from "../erros/DatabaseError";
 import { convertToJSON } from "../utils/convertXMLtoJSON";
+import sql from "mssql";
+import { fileDbConfig, requestsDbConfig } from "../config/configDatabase";
 
 dotenv.config();
 
@@ -41,11 +39,9 @@ class RequestController {
         );
       }
 
-      await requestsDatabasePool.connect();
+      const pool = await sql.connect(requestsDbConfig);
 
-      const queryResult = await requestsDatabasePool.query(
-        requestDataQuery(params)
-      );
+      const queryResult = await pool.query(requestDataQuery(params));
       const request = queryResult.recordset;
 
       const result = await convertToJSON(
@@ -53,21 +49,11 @@ class RequestController {
         request[0].FormData,
         request[0].InitialFormData
       );
+
+      pool.close();
       res.status(200).json(result);
     } catch (error) {
       next(error);
-    } finally {
-      if (requestsDatabasePool) {
-        try {
-          if (requestsDatabasePool.connected) {
-            requestsDatabasePool.close();
-          }
-        } catch (error) {
-          throw new DatabaseError(
-            `An error occurred when closing the database connection.`
-          );
-        }
-      }
     }
   }
 
@@ -88,28 +74,15 @@ class RequestController {
         );
       }
 
-      await requestsDatabasePool.connect();
+      const pool = await sql.connect(requestsDbConfig);
 
-      const queryResult = await requestsDatabasePool.query(
-        listOfStepsRequestQuery(params)
-      );
+      const queryResult = await pool.query(listOfStepsRequestQuery(params));
       const result = queryResult.recordset;
 
+      pool.close();
       res.status(200).json(result);
     } catch (error) {
       next(error);
-    } finally {
-      if (requestsDatabasePool) {
-        try {
-          if (requestsDatabasePool.connected) {
-            requestsDatabasePool.close();
-          }
-        } catch (error) {
-          throw new DatabaseError(
-            `An error occurred when closing the database connection.`
-          );
-        }
-      }
     }
   }
 
@@ -138,11 +111,9 @@ class RequestController {
         );
       }
 
-      await requestsDatabasePool.connect();
+      const pool = await sql.connect(requestsDbConfig);
 
-      const queryResult = await requestsDatabasePool.query(
-        requestDataOnStepsQuery(params)
-      );
+      const queryResult = await pool.query(requestDataOnStepsQuery(params));
       const request = queryResult.recordset;
 
       const result = await convertToJSON(
@@ -150,21 +121,11 @@ class RequestController {
         request[0].FormDataEnd,
         request[0].InitialFormData
       );
+
+      pool.close();
       res.status(200).json(result);
     } catch (error) {
       next(error);
-    } finally {
-      if (requestsDatabasePool) {
-        try {
-          if (requestsDatabasePool.connected) {
-            requestsDatabasePool.close();
-          }
-        } catch (error) {
-          throw new DatabaseError(
-            `An error occurred when closing the database connection.`
-          );
-        }
-      }
     }
   }
 
@@ -183,28 +144,15 @@ class RequestController {
         throw new BadRequestError(`The request must have a Request ID value`);
       }
 
-      await requestsDatabasePool.connect();
+      const pool = await sql.connect(requestsDbConfig);
 
-      const queryResult = await requestsDatabasePool.query(
-        requestListOfFilesQuery(params)
-      );
+      const queryResult = await pool.query(requestListOfFilesQuery(params));
       const result = queryResult.recordset;
 
+      pool.close();
       res.status(200).json(result);
     } catch (error) {
       next(error);
-    } finally {
-      if (requestsDatabasePool) {
-        try {
-          if (requestsDatabasePool.connected) {
-            requestsDatabasePool.close();
-          }
-        } catch (error) {
-          throw new DatabaseError(
-            `An error occurred when closing the database connection.`
-          );
-        }
-      }
     }
   }
 
@@ -225,28 +173,15 @@ class RequestController {
         );
       }
 
-      await requestsDatabasePool.connect();
+      const pool = await sql.connect(requestsDbConfig);
 
-      const queryResult = await requestsDatabasePool.query(
-        requestListOfFilesQuery(params)
-      );
+      const queryResult = await pool.query(requestListOfFilesQuery(params));
       const result = queryResult.recordset;
 
+      pool.close();
       res.status(200).json(result);
     } catch (error) {
       next(error);
-    } finally {
-      if (requestsDatabasePool) {
-        try {
-          if (requestsDatabasePool.connected) {
-            requestsDatabasePool.close();
-          }
-        } catch (error) {
-          throw new DatabaseError(
-            `An error occurred when closing the database connection.`
-          );
-        }
-      }
     }
   }
 
@@ -266,28 +201,15 @@ class RequestController {
         );
       }
 
-      await fileDatabasePool.connect();
+      const pool = await sql.connect(fileDbConfig);
 
-      const queryResult = await fileDatabasePool.query(
-        requestGetFileQuery(params)
-      );
+      const queryResult = await pool.query(requestGetFileQuery(params));
       const result = queryResult.recordset;
 
+      pool.close();
       res.status(200).json(result);
     } catch (error) {
       next(error);
-    } finally {
-      if (fileDatabasePool) {
-        try {
-          if (fileDatabasePool.connected) {
-            fileDatabasePool.close();
-          }
-        } catch (error) {
-          throw new DatabaseError(
-            `An error occurred when closing the database connection.`
-          );
-        }
-      }
     }
   }
 }

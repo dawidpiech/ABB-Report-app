@@ -1,4 +1,4 @@
-import { ConnectionPool, config } from "mssql";
+import { config } from "mssql";
 import dotenv from "dotenv";
 
 dotenv.config();
@@ -20,8 +20,6 @@ const fileDbConfig: config = {
   },
 };
 
-const fileDatabasePool = new ConnectionPool(fileDbConfig);
-
 const requestsDbConfig: config = {
   server: process.env.DB_SERVER ?? "",
   database: process.env.DB_REQUEST_DATA_DB_ADRESS ?? "",
@@ -40,6 +38,4 @@ const requestsDbConfig: config = {
   },
 };
 
-const requestsDatabasePool = new ConnectionPool(requestsDbConfig);
-
-export { fileDatabasePool, requestsDatabasePool };
+export { requestsDbConfig, fileDbConfig };
