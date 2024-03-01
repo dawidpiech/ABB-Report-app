@@ -7,6 +7,7 @@ import { GlobalStyle } from "./styles/GlobalStyles.tsx";
 import { MainPage } from "./views/MainPage/MainPage.tsx";
 import { NotFoundPage } from "./views/NotFoundPage/NotFoundPage.tsx";
 import { Layout } from "./components/Layout/Layout.tsx";
+import { RequestPage } from "./views/RequestPage/RequestPage.tsx";
 
 const router = createBrowserRouter([
   {
@@ -16,6 +17,10 @@ const router = createBrowserRouter([
       {
         path: "/",
         element: <MainPage />,
+      },
+      {
+        path: "request/:id/:stepID?",
+        element: <RequestPage />,
       },
       {
         path: "*",

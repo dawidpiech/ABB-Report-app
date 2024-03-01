@@ -1,7 +1,10 @@
 import axios from "axios";
 import { CountriesList } from "../components/SearchForm/SearchForm";
 
-type CountryData = { CountryID: string; CountryName: string };
+interface CountryData {
+  CountryID: string;
+  CountryName: string;
+}
 
 export const getListOfCountries = async () => {
   try {

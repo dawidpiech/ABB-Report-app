@@ -1,7 +1,10 @@
 import axios from "axios";
 import { WorkFlowTypesList } from "../components/SearchForm/SearchForm";
 
-type WorkflowData = { WorkflowID: string; NodeName: string };
+interface WorkflowData {
+  WorkflowID: string;
+  NodeName: string;
+}
 
 export const getListOfWorkflowTypes = async () => {
   try {
