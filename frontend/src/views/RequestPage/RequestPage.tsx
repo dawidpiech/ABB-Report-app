@@ -39,9 +39,10 @@ export const RequestPage = () => {
           params.stepID
         );
         const responseFiles = await getListOfRequestFiles(params.id);
-        const responseSteps = requestData.steps
-          ? { data: requestData.steps }
-          : await getListOfRequestSteps(params.id);
+        const responseSteps =
+          requestData.steps.length !== 0
+            ? { data: requestData.steps }
+            : await getListOfRequestSteps(params.id);
 
         if (responseData && responseFiles && responseSteps) {
           setRequestData({
@@ -54,9 +55,10 @@ export const RequestPage = () => {
         if (params.id) {
           const responseData = await getRequestInitialData(params.id);
           const responseFiles = await getListOfRequestFiles(params.id);
-          const responseSteps = requestData.steps
-            ? { data: requestData.steps }
-            : await getListOfRequestSteps(params.id);
+          const responseSteps =
+            requestData.steps.length !== 0
+              ? { data: requestData.steps }
+              : await getListOfRequestSteps(params.id);
 
           if (responseData && responseFiles && responseSteps) {
             setRequestData({
