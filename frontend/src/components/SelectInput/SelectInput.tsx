@@ -1,5 +1,5 @@
 import { ChangeEvent } from "react";
-import { FieldWrapper } from "../FieldWrapper/FieldWrapper";
+import { FormFieldWrapper } from "../FormFieldWrapper/FormFieldWrapper";
 import { StyledOption, StyledSelect } from "./SelectInput.styles";
 import { Label } from "../Label/Label";
 
@@ -19,7 +19,7 @@ export const SelectInput = ({
   width,
 }: SelectInputProps) => {
   return (
-    <FieldWrapper width={width}>
+    <FormFieldWrapper width={width}>
       <Label>{label}</Label>
       <StyledSelect value={value} onChange={onChange}>
         <StyledOption key="disabled" value={""} disabled hidden>
@@ -32,6 +32,6 @@ export const SelectInput = ({
           </StyledOption>
         ))}
       </StyledSelect>
-    </FieldWrapper>
+    </FormFieldWrapper>
   );
 };

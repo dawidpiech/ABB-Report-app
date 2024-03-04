@@ -9,7 +9,11 @@ export const StyledThead = styled.thead``;
 
 export const StyledTbody = styled.tbody``;
 
-export const StyledTr = styled.tr`
+interface StyledTrProps {
+  background: boolean;
+}
+
+export const StyledTr = styled.tr<StyledTrProps>`
   background-color: ${(props) =>
     props.background
       ? ({ theme }) => theme.colors.lightGray

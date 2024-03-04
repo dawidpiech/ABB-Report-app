@@ -7,14 +7,14 @@ import {
   StyledTh,
   StyledThead,
   StyledTr,
-} from "./Table.styles";
+} from "./RequestList.styles";
 import { useNavigate, useLocation } from "react-router-dom";
 import { getListOfRequests, Request } from "../../api/getListOfRequets";
 import { LoadingSpinner } from "../LoadingSpinner/LoadingSpinner";
 import { format } from "date-fns";
 import { Pagination } from "../Pagination/Pagination";
 
-export const Table = () => {
+export const RequestList = () => {
   const [requests, setRequests] = useState<Request[]>([]);
   const [counter, setCounter] = useState<number>(0);
   const [isLoading, setIsLoading] = useState(true);
@@ -55,7 +55,7 @@ export const Table = () => {
     <>
       <StyledTable>
         <StyledThead>
-          <StyledTr>
+          <StyledTr key="thead" background={false}>
             {tableHeadings.map((e, index) => (
               <StyledTh key={`th-${index}`}>{e}</StyledTh>
             ))}
@@ -63,7 +63,7 @@ export const Table = () => {
         </StyledThead>
         <StyledTbody>
           {isLoading ? (
-            <StyledTr>
+            <StyledTr key="Loading spinner" background={false}>
               <StyledTd colSpan={6}>
                 <LoadingSpinner version="top" zindex={999}></LoadingSpinner>
               </StyledTd>

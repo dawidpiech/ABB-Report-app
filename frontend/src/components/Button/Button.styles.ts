@@ -1,6 +1,10 @@
 import styled from "styled-components";
 
-export const StyledButton = styled.button`
+interface StyledButton {
+  color: string;
+}
+
+export const StyledButton = styled.button<StyledButton>`
   background-color: ${(props) =>
     props.color ? props.color : ({ theme }) => theme.colors.red};
   color: ${({ theme }) => theme.colors.white};

@@ -86,7 +86,12 @@ export const LoadingSpinnerAnimation = styled.div`
   }
 `;
 
-export const LoadingSpinnerWrapper = styled.div`
+interface LoadingSpinnerWrapperProps {
+  version: string;
+  zIndex: number;
+}
+
+export const LoadingSpinnerWrapper = styled.div<LoadingSpinnerWrapperProps>`
   position: absolute;
   width: 100%;
   height: -webkit-fill-available;

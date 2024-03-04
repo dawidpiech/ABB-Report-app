@@ -1,6 +1,6 @@
 import { ChangeEvent } from "react";
 import { StyledInput } from "./TextInput.styles";
-import { FieldWrapper } from "../FieldWrapper/FieldWrapper";
+import { FormFieldWrapper } from "../FormFieldWrapper/FormFieldWrapper";
 import { FormErrorMessage } from "../FormErrorMessage/FormErrorMessage";
 import { Label } from "../Label/Label";
 
@@ -22,7 +22,7 @@ export const TextInput = ({
   onChange,
 }: TextInputProps) => {
   return (
-    <FieldWrapper width={width}>
+    <FormFieldWrapper width={width}>
       <Label>{label}</Label>
       <StyledInput type="text" value={value} onChange={onChange} />
       {error ? (
@@ -30,6 +30,6 @@ export const TextInput = ({
       ) : (
         ""
       )}
-    </FieldWrapper>
+    </FormFieldWrapper>
   );
 };

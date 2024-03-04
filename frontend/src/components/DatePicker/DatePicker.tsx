@@ -1,7 +1,7 @@
-import { ChangeEvent, HTMLProps } from "react";
+import { ChangeEvent } from "react";
 import { StyledDatePicker, StyledDatePickerWrapper } from "./DatePicker.styles";
 import { Label } from "../Label/Label";
-import { FieldWrapper } from "../FieldWrapper/FieldWrapper";
+import { FormFieldWrapper } from "../FormFieldWrapper/FormFieldWrapper";
 import CalendarIcon from "../../assets/calendar.svg";
 
 interface DatePickerProps {
@@ -21,7 +21,7 @@ export const DatePicker = ({
   onChange,
 }: DatePickerProps) => {
   return (
-    <FieldWrapper width={width}>
+    <FormFieldWrapper width={width}>
       <Label>{label}</Label>
       <StyledDatePickerWrapper>
         <StyledDatePicker
@@ -32,6 +32,6 @@ export const DatePicker = ({
           isClearable={true}
         />
       </StyledDatePickerWrapper>
-    </FieldWrapper>
+    </FormFieldWrapper>
   );
 };

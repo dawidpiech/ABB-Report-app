@@ -1,21 +1,10 @@
-import { FieldWrapperBlock } from "./FieldWrapper.styles";
+import React from "react";
+import { StyledFieldWrapper } from "./FieldWrapper.styles";
 
-export interface FieldWrapperProps {
+interface FieldWrapperProps {
   children: React.ReactNode;
-  width?: number;
-  display?: string;
-  alignitems?: string;
 }
 
-export const FieldWrapper = ({
-  children,
-  width,
-  display,
-  alignitems,
-}: FieldWrapperProps) => {
-  return (
-    <FieldWrapperBlock width={width} display={display} alignitems={alignitems}>
-      {children}
-    </FieldWrapperBlock>
-  );
+export const FieldWrapper = ({ children }: FieldWrapperProps) => {
+  return <StyledFieldWrapper>{children}</StyledFieldWrapper>;
 };

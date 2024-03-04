@@ -1,7 +1,9 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
 interface PaginationLinkProps {
-  active: boolean;
+  isActive: boolean;
+  onClick: () => void;
+  disabled: boolean;
 }
 
 export const PaginationContainer = styled.div`
@@ -17,16 +19,16 @@ export const PaginationLink = styled.button<PaginationLinkProps>`
   padding: 5px 10px;
   border-radius: 5px;
   border: none;
-  font-weight: ${(props) => (props.active ? 700 : 400)};
+  font-weight: ${(props) => (props.isActive ? 700 : 400)};
   text-decoration: none;
   text-align: center;
   cursor: pointer;
   background-color: ${(props) =>
-    props.active
+    props.isActive
       ? ({ theme }) => theme.colors.red
       : ({ theme }) => theme.colors.lightGray};
   color: ${(props) =>
-    props.active
+    props.isActive
       ? ({ theme }) => theme.colors.white
       : ({ theme }) => theme.colors.black};
 `;

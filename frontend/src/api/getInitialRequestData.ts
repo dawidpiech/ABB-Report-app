@@ -5,18 +5,24 @@ export interface View {
   groups: Group[];
 }
 
-interface Group {
+export interface Group {
   nameOfGroup: string;
   sections: Section[];
 }
 
-interface Section {
+export interface Section {
   typeOfSection: string;
   nameOfSection: string;
+  fields: Field[];
+}
+
+export interface Field {
+  nameOfField: string;
+  typeOfField: string;
   values: Value[];
 }
 
-interface Value {
+export interface Value {
   value: string;
   isModified?: string;
   isNewValue?: boolean;

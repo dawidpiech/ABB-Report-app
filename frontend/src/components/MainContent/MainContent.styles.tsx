@@ -16,4 +16,5 @@ export const MainContentWrapperInner = styled.div`
   justify-content: left;
   position: relative;
   flex-direction: column;
+  overflow: hidden;
 `;

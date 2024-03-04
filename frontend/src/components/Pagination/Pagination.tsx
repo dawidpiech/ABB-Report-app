@@ -32,9 +32,9 @@ export const Pagination = ({ totalPages, isLoading }: PaginationProps) => {
           handleChangePage(1);
         }}
         disabled={isLoading}
-        active={currentPage === 1}
+        isActive={true}
       >
-        1
+        {1}
       </PaginationLink>
     );
     pageLinks.push(firstPageLink);
@@ -55,7 +55,7 @@ export const Pagination = ({ totalPages, isLoading }: PaginationProps) => {
             handleChangePage(i);
           }}
           disabled={isLoading}
-          active={i === currentPage}
+          isActive={i === currentPage}
         >
           {i}
         </PaginationLink>
@@ -74,7 +74,7 @@ export const Pagination = ({ totalPages, isLoading }: PaginationProps) => {
           handleChangePage(totalPages);
         }}
         disabled={isLoading}
-        active={currentPage === totalPages}
+        isActive={currentPage === totalPages}
       >
         {totalPages}
       </PaginationLink>

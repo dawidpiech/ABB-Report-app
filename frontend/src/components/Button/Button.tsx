@@ -1,4 +1,4 @@
-import { FieldWrapper } from "../FieldWrapper/FieldWrapper";
+import { FormFieldWrapper } from "../FormFieldWrapper/FormFieldWrapper";
 import { StyledButton } from "./Button.styles";
 
 interface ButtonProps {
@@ -19,10 +19,10 @@ export const Button = ({
   disabled,
 }: ButtonProps) => {
   return (
-    <FieldWrapper width={width} display={display} alignitems={alignitems}>
+    <FormFieldWrapper width={width} display={display} alignitems={alignitems}>
       <StyledButton color={color} disabled={disabled}>
         {children}
       </StyledButton>
-    </FieldWrapper>
+    </FormFieldWrapper>
   );
 };

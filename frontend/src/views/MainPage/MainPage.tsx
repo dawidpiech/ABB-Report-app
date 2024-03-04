@@ -1,12 +1,11 @@
-import { MainContent } from "../../components/MainContent/MainContent";
 import { SearchForm } from "../../components/SearchForm/SearchForm";
-import { Table } from "../../components/Table/Table";
+import { RequestList } from "../../components/RequestList/RequestList";
 
 export const MainPage = () => {
   return (
-    <MainContent>
+    <>
       <SearchForm />
-      <Table></Table>
-    </MainContent>
+      <RequestList></RequestList>
+    </>
   );
 };
