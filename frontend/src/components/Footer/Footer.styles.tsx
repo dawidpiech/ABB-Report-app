@@ -8,9 +8,14 @@ export const FooterWrapper = styled.footer`
   display: flex;
   align-items: center;
   justify-content: center;
+  font-size: 1rem;
+  @media screen and (max-width: 767px) {
+    font-size: 0.8rem;
+    padding: 0 15px;
+    text-align: center;
+  }
 
   p {
-    font-size: 1rem;
     a {
       color: ${({ theme }) => theme.colors.red};
       text-decoration: none;

@@ -87,8 +87,8 @@ export const LoadingSpinnerAnimation = styled.div`
 `;
 
 interface LoadingSpinnerWrapperProps {
-  version: string;
-  zIndex: number;
+  $version: string | undefined;
+  $zindex: number | undefined;
 }
 
 export const LoadingSpinnerWrapper = styled.div<LoadingSpinnerWrapperProps>`
@@ -103,7 +103,7 @@ export const LoadingSpinnerWrapper = styled.div<LoadingSpinnerWrapperProps>`
   ${(props) => (props.version === "top" ? "padding-top: 50px" : "")};
   flex-direction: column;
   background-color: ${({ theme }) => theme.colors.white};
-  z-index: ${(props) => (props.zIndex ? props.zIndex : "9999")};
+  z-index: ${(props) => (props.zindex ? props.zindex : "9999")};
 `;
 
 export const LoadingSpinnerWrapperInner = styled.div`

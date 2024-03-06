@@ -10,21 +10,34 @@ interface GroupDataProps {
 }
 
 export const GroupData = ({ group, files }: GroupDataProps) => {
-  return (
-    <>
-      <GroupDataWrapper>
-        {group.nameOfGroup ? <p>{group.nameOfGroup}</p> : ""}
-        {group.sections.map((section, index) => (
-          <SectionDataWrapper key={index}>
-            {section.nameOfSection ? <h5>{section.nameOfSection}</h5> : ""}
-            {section.typeOfSection === "Field" ? (
-              <FieldSection fields={section.fields} files={files} />
-            ) : (
-              <TableSection data={section.fields} />
-            )}
-          </SectionDataWrapper>
-        ))}
-      </GroupDataWrapper>
-    </>
-  );
+  let groupHaveValues: boolean = false;
+
+  for (const section of group.sections) {
+    for (const field of section.fields) {
+      if (field.values.length > 0 && field.values[0].value !== "") {
+        groupHaveValues = true;
+        break;
+      }
+    }
+  }
+
+  if (groupHaveValues)
+    return (
+      <>
+        <GroupDataWrapper>
+          {group.nameOfGroup ? <p>{group.nameOfGroup}</p> : ""}
+          {group.sections.map((section, index) => (
+            <SectionDataWrapper key={index}>
+              {section.nameOfSection ? <h5>{section.nameOfSection}</h5> : ""}
+              {section.typeOfSection === "Field" ? (
+                <FieldSection fields={section.fields} files={files} />
+              ) : (
+                <TableSection data={section.fields} />
+              )}
+            </SectionDataWrapper>
+          ))}
+        </GroupDataWrapper>
+      </>
+    );
+  else return null;
 };

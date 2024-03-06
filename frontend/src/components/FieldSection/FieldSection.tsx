@@ -17,53 +17,50 @@ export const FieldSection = ({ fields, files }: FieldSectionProps) => {
   return (
     <>
       {fields.map((field, index) => {
-        if (field.nameOfField === "") return;
+        if (
+          field.nameOfField === "" ||
+          (field.values.length === 1 && field.values[0].value === "")
+        )
+          return null;
         switch (field.typeOfField) {
           case "SingleLineText":
             return (
-              <FieldWrapper>
+              <FieldWrapper key={index}>
                 <SingleLineTextField key={index} value={field} />
               </FieldWrapper>
             );
           case "YesNo":
             return (
-              <FieldWrapper>
-                <SingleChoiceList key={index} value={field}></SingleChoiceList>
+              <FieldWrapper key={index}>
+                <SingleChoiceList value={field}></SingleChoiceList>
               </FieldWrapper>
             );
           case "SingleChoiceList":
             return (
-              <FieldWrapper>
-                <SingleChoiceList key={index} value={field}></SingleChoiceList>
+              <FieldWrapper key={index}>
+                <SingleChoiceList value={field}></SingleChoiceList>
               </FieldWrapper>
             );
           case "ValueNameSelector":
             return (
-              <FieldWrapper>
-                <ValueNameSelector
-                  key={index}
-                  value={field}
-                ></ValueNameSelector>
+              <FieldWrapper key={index}>
+                <ValueNameSelector value={field}></ValueNameSelector>
               </FieldWrapper>
             );
           case "MultiChoiceList":
             return (
-              <FieldWrapper>
-                <MultiChoiceList key={index} value={field} />
+              <FieldWrapper key={index}>
+                <MultiChoiceList value={field} />
               </FieldWrapper>
             );
           case "MultiLineText":
             return (
-              <FieldWrapper>
-                <TextArea key={index} value={field} />
+              <FieldWrapper key={index}>
+                <TextArea value={field} />
               </FieldWrapper>
             );
           case "FileUpload":
-            return (
-              <FieldWrapper>
-                <FileUpload key={index} value={field} listOfFiles={files} />
-              </FieldWrapper>
-            );
+            return <FileUpload key={index} value={field} listOfFiles={files} />;
           default:
             return null;
         }

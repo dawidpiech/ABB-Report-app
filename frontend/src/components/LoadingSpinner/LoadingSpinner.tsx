@@ -7,13 +7,13 @@ import {
 import ABBLogoSrc from "../../assets/ABB_logo.svg";
 
 interface LoadingSpinnerProps {
-  version?: string;
-  zindex?: number;
+  version?: string | undefined;
+  zindex?: number | undefined;
 }
 
 export const LoadingSpinner = ({ version, zindex }: LoadingSpinnerProps) => {
   return (
-    <LoadingSpinnerWrapper zindex={zindex} version={version}>
+    <LoadingSpinnerWrapper $zindex={zindex} $version={version}>
       <LoadingSpinnerWrapperInner>
         <ABBLogo src={ABBLogoSrc} alt="ABB logo" />
         <LoadingSpinnerAnimation />

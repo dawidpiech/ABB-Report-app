@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 
 interface StepWrapperProps {
-  isActive: boolean;
+  $isActive: boolean;
 }
 
 export const RequestStepNavigationWrapper = styled.div`
@@ -46,11 +46,11 @@ export const StepWrapper = styled(Link)<StepWrapperProps>`
   text-align: center;
   margin: 0 10px;
   background-color: ${(props) =>
-    props.isActive
+    props.$isActive
       ? ({ theme }) => theme.colors.red
       : ({ theme }) => theme.colors.lightGray};
   color: ${(props) =>
-    props.isActive
+    props.$isActive
       ? ({ theme }) => theme.colors.white
       : ({ theme }) => theme.colors.black};
   border-bottom: 5px ${({ theme }) => theme.colors.red} solid;

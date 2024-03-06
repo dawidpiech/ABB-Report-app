@@ -30,9 +30,12 @@ export const StyledNewValue = styled.span`
   color: ${({ theme }) => theme.colors.green};
 `;
 
+export const StyledInputCheckboxWraper = styled.div``;
+
 export const StyledInputCheckbox = styled.input`
   display: block;
   font-size: 0.8rem;
+  height: fit-content;
   accent-color: ${({ theme }) => theme.colors.red};
   cursor: not-allowed;
 `;

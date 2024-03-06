@@ -63,11 +63,11 @@ export const RequestStepNavigation = ({ steps }: StepNavigationProps) => {
       onMouseDown={handleMouseDown}
       onMouseMove={handleMouseMove}
     >
-      {steps.map((e) => (
+      {steps.map((e, index) => (
         <StepWrapper
-          key={e.WorkflowTransitionID}
-          to={`http://localhost:5173/request/${e.RequestID}/${e.WorkflowTransitionID}`}
-          isActive={stepID === String(e.WorkflowTransitionID)}
+          key={index}
+          to={`/request/${e.RequestID}/${e.WorkflowTransitionID}`}
+          $isActive={stepID === String(e.WorkflowTransitionID)}
         >
           {e.WorkflowTransitionName}
         </StepWrapper>

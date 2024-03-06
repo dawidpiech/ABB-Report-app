@@ -1,6 +1,7 @@
 import { Field } from "../../api/getInitialRequestData";
 import {
   StyledInputCheckbox,
+  StyledInputCheckboxWraper,
   StyledLabel,
   StyledNewValue,
   StyledOldValue,
@@ -16,11 +17,11 @@ export const MultiChoiceList = ({ value }: FieldProps) => {
     <>
       <StyledLabel>{value.nameOfField}:</StyledLabel>
       <StyledValue>
-        {value.values.map((value) => (
-          <>
-            <StyledInputCheckbox type="checkbox" checked />
+        {value.values.map((value, index) => (
+          <StyledInputCheckboxWraper key={index}>
+            <StyledInputCheckbox type="checkbox" defaultChecked />
             <label>{value.value}</label>
-          </>
+          </StyledInputCheckboxWraper>
         ))}
 
         {value.values[0].isModified ? (

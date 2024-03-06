@@ -11,6 +11,7 @@ interface FieldProps {
 }
 
 export const SingleLineTextField = ({ value }: FieldProps) => {
+  if (value.nameOfField === "Organization Helper") console.log(value);
   return (
     <>
       <StyledLabel>{value.nameOfField}:</StyledLabel>

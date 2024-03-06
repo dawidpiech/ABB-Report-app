@@ -94,7 +94,6 @@ const listOfRequestsQuery = (params: RequestsListQueryParams) => {
       OFFSET ${params.page * 100 - 100} ROWS 
       FETCH NEXT ${params.page * 100} ROWS ONLY;
       `;
-
   return listOfRequestsQuery;
 };
 

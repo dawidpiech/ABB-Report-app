@@ -2,9 +2,9 @@ import { FieldWrapperBlock } from "./FormFieldWrapper.styles";
 
 export interface FieldWrapperProps {
   children: React.ReactNode;
-  width?: number;
-  display?: string;
-  alignitems?: string;
+  width?: number | undefined;
+  display?: string | undefined;
+  alignitems?: string | undefined;
 }
 
 export const FormFieldWrapper = ({
@@ -14,7 +14,11 @@ export const FormFieldWrapper = ({
   alignitems,
 }: FieldWrapperProps) => {
   return (
-    <FieldWrapperBlock width={width} display={display} alignitems={alignitems}>
+    <FieldWrapperBlock
+      $width={width}
+      $display={display}
+      $alignitems={alignitems}
+    >
       {children}
     </FieldWrapperBlock>
   );

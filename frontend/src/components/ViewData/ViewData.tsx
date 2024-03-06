@@ -13,7 +13,7 @@ export const ViewData = ({ views, activeTab, files }: ViewProps) => {
   return (
     <>
       {views.map((view, index) => (
-        <ViewWrapper key={index} isActive={activeTab === index}>
+        <ViewWrapper key={index} $isActive={activeTab === index}>
           {view.groups.map((group, index) => (
             <GroupData key={index} group={group} files={files} />
           ))}

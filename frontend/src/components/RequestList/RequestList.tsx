@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import {
   StyledLink,
   StyledTable,
+  StyledTableWrapper,
   StyledTbody,
   StyledTd,
   StyledTh,
@@ -53,48 +54,49 @@ export const RequestList = () => {
 
   return (
     <>
-      <StyledTable>
-        <StyledThead>
-          <StyledTr key="thead" background={false}>
-            {tableHeadings.map((e, index) => (
-              <StyledTh key={`th-${index}`}>{e}</StyledTh>
-            ))}
-          </StyledTr>
-        </StyledThead>
-        <StyledTbody>
-          {isLoading ? (
-            <StyledTr key="Loading spinner" background={false}>
-              <StyledTd colSpan={6}>
-                <LoadingSpinner version="top" zindex={999}></LoadingSpinner>
-              </StyledTd>
+      <StyledTableWrapper>
+        <StyledTable>
+          <StyledThead>
+            <StyledTr key="thead" $background={false}>
+              {tableHeadings.map((e, index) => (
+                <StyledTh key={`th-${index}`}>{e}</StyledTh>
+              ))}
             </StyledTr>
-          ) : (
-            requests.map((e, index) => (
-              <StyledTr
-                key={`row-${index}`}
-                background={index % 2 === 0 ? true : false}
-              >
-                <StyledTd>
-                  <StyledLink to={`request/${e.RequestID}`}>
-                    {e.RequestID}{" "}
-                  </StyledLink>
-                </StyledTd>
-                <StyledTd>{e.CompanyName}</StyledTd>
-                <StyledTd>{e.WorkflowName}</StyledTd>
-                <StyledTd>{e.RequestorEmail}</StyledTd>
-                <StyledTd>{e.RequestorName}</StyledTd>
-                <StyledTd>
-                  {e.OpenedAt ? format(e.OpenedAt, "yyyy-MM-dd") : ""}
-                </StyledTd>
-                <StyledTd>
-                  {e.ClosedAt ? format(e.ClosedAt, "yyyy-MM-dd") : ""}
+          </StyledThead>
+          <StyledTbody>
+            {isLoading ? (
+              <StyledTr key="Loading spinner" $background={false}>
+                <StyledTd colSpan={6}>
+                  <LoadingSpinner version="top" zindex={999}></LoadingSpinner>
                 </StyledTd>
               </StyledTr>
-            ))
-          )}
-        </StyledTbody>
-      </StyledTable>
-
+            ) : (
+              requests.map((e, index) => (
+                <StyledTr
+                  key={`row-${index}`}
+                  $background={index % 2 === 0 ? true : false}
+                >
+                  <StyledTd>
+                    <StyledLink to={`request/${e.RequestID}`}>
+                      {e.RequestID}{" "}
+                    </StyledLink>
+                  </StyledTd>
+                  <StyledTd>{e.CompanyName}</StyledTd>
+                  <StyledTd>{e.WorkflowName}</StyledTd>
+                  <StyledTd>{e.RequestorEmail}</StyledTd>
+                  <StyledTd>{e.RequestorName}</StyledTd>
+                  <StyledTd>
+                    {e.OpenedAt ? format(e.OpenedAt, "yyyy-MM-dd") : ""}
+                  </StyledTd>
+                  <StyledTd>
+                    {e.ClosedAt ? format(e.ClosedAt, "yyyy-MM-dd") : ""}
+                  </StyledTd>
+                </StyledTr>
+              ))
+            )}
+          </StyledTbody>
+        </StyledTable>
+      </StyledTableWrapper>
       {requests.length > 0 && !isLoading ? (
         <Pagination
           totalPages={Math.ceil(counter / 100)}
