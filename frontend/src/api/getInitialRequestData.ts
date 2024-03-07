@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 
 export interface View {
   nameOfView: string;
@@ -31,11 +31,12 @@ export interface Value {
 export const getRequestInitialData = async (id: string) => {
   try {
     const requestData = await axios.get<View[]>(
-      `http://localhost:3000/api/request/getRequestData?id=${id}`
+      `${import.meta.env.VITE_API}/request/getRequestData?id=${id}`
     );
 
     return requestData;
   } catch (error) {
-    console.log("Błąd podczas pobierania danych z API", error);
+    const e = error as AxiosError;
+    throw new Error(`${e.message}: ${e.response?.statusText}`);
   }
 };

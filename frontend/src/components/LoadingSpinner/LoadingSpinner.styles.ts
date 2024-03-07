@@ -98,12 +98,12 @@ export const LoadingSpinnerWrapper = styled.div<LoadingSpinnerWrapperProps>`
   min-height: 300px;
   display: flex;
   justify-content: ${(props) =>
-    props.version === "top" ? "flex-start" : "center"};
+    props.$version === "top" ? "flex-start" : "center"};
   align-items: "center";
-  ${(props) => (props.version === "top" ? "padding-top: 50px" : "")};
+  ${(props) => (props.$version === "top" ? "padding-top: 50px" : "")};
   flex-direction: column;
   background-color: ${({ theme }) => theme.colors.white};
-  z-index: ${(props) => (props.zindex ? props.zindex : "9999")};
+  z-index: ${(props) => (props.$zindex ? props.$zindex : "1")};
 `;
 
 export const LoadingSpinnerWrapperInner = styled.div`

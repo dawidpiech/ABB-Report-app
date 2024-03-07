@@ -8,6 +8,7 @@ import { MainPage } from "./views/MainPage/MainPage.tsx";
 import { NotFoundPage } from "./views/NotFoundPage/NotFoundPage.tsx";
 import { Layout } from "./components/Layout/Layout.tsx";
 import { RequestPage } from "./views/RequestPage/RequestPage.tsx";
+import ErrorBoundary from "./components/Error/ErrorBoundary.tsx";
 
 const router = createBrowserRouter([
   {
@@ -16,11 +17,20 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <MainPage />,
+        element: (
+          <ErrorBoundary>
+            <MainPage />
+          </ErrorBoundary>
+        ),
+        errorElement: <ErrorBoundary children={<MainPage />} />,
       },
       {
         path: "request/:id/:stepID?",
-        element: <RequestPage />,
+        element: (
+          <ErrorBoundary>
+            <RequestPage />
+          </ErrorBoundary>
+        ),
       },
       {
         path: "*",

@@ -67,7 +67,7 @@ export const RequestList = () => {
             {isLoading ? (
               <StyledTr key="Loading spinner" $background={false}>
                 <StyledTd colSpan={6}>
-                  <LoadingSpinner version="top" zindex={999}></LoadingSpinner>
+                  <LoadingSpinner version="top" zindex={99}></LoadingSpinner>
                 </StyledTd>
               </StyledTr>
             ) : (

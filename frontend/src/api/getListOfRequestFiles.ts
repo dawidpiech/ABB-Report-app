@@ -8,11 +8,11 @@ export interface File {
 export const getListOfRequestFiles = async (id: string) => {
   try {
     const requestData = await axios.get<File[]>(
-      `http://localhost:3000/api/request/getRequestListOfFiles?id=${id}`
+      `${import.meta.env.VITE_API}/request/getRequestListOfFiles?id=${id}`
     );
 
     return requestData;
   } catch (error) {
-    console.log("Błąd podczas pobierania danych z API", error);
+    throw new Error("Ooops... Something went wron please try again later.");
   }
 };

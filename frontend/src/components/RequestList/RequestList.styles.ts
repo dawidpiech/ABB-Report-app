@@ -44,7 +44,7 @@ export const StyledLink = styled(Link)`
 export const StyledTableWrapper = styled.div`
   width: 100%;
   display: block;
-  min-height: 50vh;
+  min-height: 40vh;
   position: relative;
   overflow-x: auto;
 

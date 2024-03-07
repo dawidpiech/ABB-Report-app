@@ -6,11 +6,12 @@ export const MainContentWrapper = styled.div`
   display: flex;
   align-items: flex-start;
   justify-content: center;
+  margin: 5px 0;
 `;
 
 export const MainContentWrapperInner = styled.div`
   width: 1440px;
-  min-height: calc(100vh - 140px);
+  min-height: calc(100vh - 150px);
   background-color: ${({ theme }) => theme.colors.white};
   display: flex;
   justify-content: left;

@@ -33,14 +33,13 @@ export interface Request {
 export const getListOfRequests = async (data: URLSearchParams) => {
   try {
     const requests: AxiosResponse = await axios.get<RequestData>(
-      "http://localhost:3000/api/list/getListOfRequests",
+      `${import.meta.env.VITE_API}/list/getListOfRequests`,
       {
         params: Object.fromEntries(data.entries()),
       }
     );
     return requests;
   } catch (error) {
-    console.log("Błąd podczas pobierania danych z API", error);
-    return null;
+    throw new Error("Ooops... Something went wron please try again later.");
   }
 };

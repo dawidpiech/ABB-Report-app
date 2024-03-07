@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { CountriesList } from "../components/SearchForm/SearchForm";
 
 interface CountryData {
@@ -9,7 +9,7 @@ interface CountryData {
 export const getListOfCountries = async () => {
   try {
     const countries = await axios.get<CountryData[]>(
-      "http://localhost:3000/api/list/getListOfSapCountry"
+      `${import.meta.env.VITE_API}/list/getListOfSapCountry`
     );
 
     const countriesList: CountriesList = Object.fromEntries(
@@ -21,6 +21,7 @@ export const getListOfCountries = async () => {
 
     return countriesList;
   } catch (error) {
-    console.log("Błąd podczas pobierania danych z API", error);
+    const e = error as AxiosError;
+    throw new Error(`${e.message}: ${e.response?.statusText}`);
   }
 };

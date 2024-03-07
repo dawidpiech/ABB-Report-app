@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { WorkFlowTypesList } from "../components/SearchForm/SearchForm";
 
 interface WorkflowData {
@@ -9,7 +9,7 @@ interface WorkflowData {
 export const getListOfWorkflowTypes = async () => {
   try {
     const workflowTypes = await axios.get<WorkflowData[]>(
-      "http://localhost:3000/api/list/getListOfWorkflows"
+      `${import.meta.env.VITE_API}/list/getListOfWorkflows`
     );
 
     const workflowTypesList: WorkFlowTypesList = Object.fromEntries(
@@ -23,6 +23,7 @@ export const getListOfWorkflowTypes = async () => {
 
     return workflowTypesList;
   } catch (error) {
-    console.log("Błąd podczas pobierania danych z API", error);
+    const e = error as AxiosError;
+    throw new Error(`${e.message}: ${e.response?.statusText}`);
   }
 };

@@ -11,7 +11,7 @@ export interface RequestStep {
 export const getListOfRequestSteps = async (id: string) => {
   try {
     const requestData = await axios.get<RequestStep[]>(
-      `http://localhost:3000/api/request/getListOfRequestSteps?id=${id}`
+      `${import.meta.env.VITE_API}/request/getListOfRequestSteps?id=${id}`
     );
 
     return requestData;

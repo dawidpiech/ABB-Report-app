@@ -14,6 +14,8 @@ import {
   File,
 } from "../../api/getListOfRequestFiles.ts";
 import { LoadingSpinner } from "../../components/LoadingSpinner/LoadingSpinner.tsx";
+import { useThrowAsyncError } from "../../hooks/useThrowAsyncError.tsx";
+import ErrorBoundary from "../../components/Error/ErrorBoundary.tsx";
 
 export const RequestPage = () => {
   const params = useParams();
@@ -27,30 +29,17 @@ export const RequestPage = () => {
     steps: [],
     files: [],
   });
+  const throwAsyncError = useThrowAsyncError();
 
   useEffect(() => {
     const fetchData = async () => {
-      setIsLoading(true);
-      if (params.stepID && params.id) {
-        const responseData = await getRequestDataOnStep(
-          params.id,
-          params.stepID
-        );
-        const responseFiles = await getListOfRequestFiles(params.id);
-        const responseSteps =
-          requestData.steps.length !== 0
-            ? { data: requestData.steps }
-            : await getListOfRequestSteps(params.id);
-        if (responseData && responseFiles && responseSteps) {
-          setRequestData({
-            data: responseData.data,
-            steps: responseSteps.data,
-            files: responseFiles.data,
-          });
-        }
-      } else {
-        if (params.id) {
-          const responseData = await getRequestInitialData(params.id);
+      try {
+        setIsLoading(true);
+        if (params.stepID && params.id) {
+          const responseData = await getRequestDataOnStep(
+            params.id,
+            params.stepID
+          );
           const responseFiles = await getListOfRequestFiles(params.id);
           const responseSteps =
             requestData.steps.length !== 0
@@ -63,10 +52,30 @@ export const RequestPage = () => {
               files: responseFiles.data,
             });
           }
+        } else {
+          if (params.id) {
+            const responseData = await getRequestInitialData(params.id);
+            const responseFiles = await getListOfRequestFiles(params.id);
+            const responseSteps =
+              requestData.steps.length !== 0
+                ? { data: requestData.steps }
+                : await getListOfRequestSteps(params.id);
+            if (responseData && responseFiles && responseSteps) {
+              setRequestData({
+                data: responseData.data,
+                steps: responseSteps.data,
+                files: responseFiles.data,
+              });
+            }
+          }
         }
+      } catch (error) {
+        throwAsyncError(error);
+      } finally {
+        setIsLoading(false);
       }
-      setIsLoading(false);
     };
+
     fetchData();
   }, [params]);
 

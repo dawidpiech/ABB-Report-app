@@ -1,14 +1,17 @@
 import { View } from "./getInitialRequestData";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 
 export const getRequestDataOnStep = async (id: string, stepID: string) => {
   try {
     const requestData = await axios.get<View[]>(
-      `http://localhost:3000/api/request/getRequestDataOnStep?id=${id}&stepID=${stepID}`
+      `${
+        import.meta.env.VITE_API
+      }/request/getRequestDataOnStep?id=${id}&stepID=${stepID}`
     );
 
     return requestData;
   } catch (error) {
-    console.log("Błąd podczas pobierania danych z API", error);
+    const e = error as AxiosError;
+    throw new Error(`${e.message}: ${e.response?.statusText}`);
   }
 };
