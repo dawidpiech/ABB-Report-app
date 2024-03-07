@@ -12,6 +12,7 @@ import { getListOfCountries } from "../../api/getListOfCountries";
 import { LoadingSpinner } from "../LoadingSpinner/LoadingSpinner";
 import "react-datepicker/dist/react-datepicker.css";
 import { format } from "date-fns";
+import { useThrowAsyncError } from "../../hooks/useThrowAsyncError";
 export interface CountriesList {
   [key: string]: string;
 }
@@ -38,6 +39,7 @@ export const SearchForm = () => {
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
   const location = useLocation();
+  const throwAsyncError = useThrowAsyncError();
 
   useEffect(() => {
     setFormValues();
@@ -56,9 +58,10 @@ export const SearchForm = () => {
 
       if (countriesList) setCountries(countriesList);
       if (workflowTypesList) setWorkflowTypes(workflowTypesList);
-      setIsLoading(false);
     } catch (error) {
-      console.error("Wystąpił błąd:", error);
+      throwAsyncError(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 

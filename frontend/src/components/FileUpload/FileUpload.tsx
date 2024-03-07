@@ -11,6 +11,8 @@ import {
 import { File } from "../../api/getListOfRequestFiles";
 import { getRequestFile } from "../../api/getRequestFile";
 import { useState } from "react";
+import { useThrowAsyncError } from "../../hooks/useThrowAsyncError";
+import ErrorBoundary from "../Error/ErrorBoundary";
 
 interface FieldProps {
   value: Field;
@@ -19,6 +21,7 @@ interface FieldProps {
 
 export const FileUpload = ({ value, listOfFiles }: FieldProps) => {
   const [isLoading, setIsLoading] = useState(false);
+  const throwAsyncError = useThrowAsyncError();
 
   const downloadFile = async (id: string, fileName: string): Promise<void> => {
     try {
@@ -26,7 +29,13 @@ export const FileUpload = ({ value, listOfFiles }: FieldProps) => {
       const response = await getRequestFile(id);
 
       if (response) {
-        const blob = new Blob([response.data], { type: "application/pdf" });
+        const fileData = response.data[0].File;
+        const uint8Array = new Uint8Array(fileData.data);
+
+        const blob = new Blob([uint8Array], {
+          type: response.data[0].MimeType,
+        });
+
         const url = window.URL.createObjectURL(blob);
 
         const link = document.createElement("a");
@@ -40,39 +49,41 @@ export const FileUpload = ({ value, listOfFiles }: FieldProps) => {
         window.URL.revokeObjectURL(url);
       } else {
         throw new Error(
-          "An error occurred while downloading the file. Please try again later. "
+          "An error occurred while downloading the file. Please try again later."
         );
       }
-
-      setIsLoading(false);
     } catch (error) {
-      console.error("Błąd pobierania pliku:", error);
+      throwAsyncError(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
-    <StyledFileUploadWrapper>
-      <StyledLabel>{value.nameOfField}:</StyledLabel>
-      <StyledValue>
-        {listOfFiles.map((file, index) => (
-          <StyledFile
-            key={index}
-            onClick={() => downloadFile(file.FileUUID, file.Filename)}
-          >
-            {file.Filename}
-          </StyledFile>
-        ))}
-      </StyledValue>
-      {isLoading ? (
-        <>
-          <LoadingSpinner>
-            <LoadingSpinnerAnimation />
-            <LoadingSpinnerLabel>Dowloading...</LoadingSpinnerLabel>
-          </LoadingSpinner>
-        </>
-      ) : (
-        ""
-      )}
-    </StyledFileUploadWrapper>
+    <ErrorBoundary>
+      <StyledFileUploadWrapper>
+        <StyledLabel>{value.nameOfField}:</StyledLabel>
+        <StyledValue>
+          {listOfFiles.map((file, index) => (
+            <StyledFile
+              key={index}
+              onClick={() => downloadFile(file.FileUUID, file.Filename)}
+            >
+              {file.Filename}
+            </StyledFile>
+          ))}
+        </StyledValue>
+        {isLoading ? (
+          <>
+            <LoadingSpinner>
+              <LoadingSpinnerAnimation />
+              <LoadingSpinnerLabel>Dowloading...</LoadingSpinnerLabel>
+            </LoadingSpinner>
+          </>
+        ) : (
+          ""
+        )}
+      </StyledFileUploadWrapper>
+    </ErrorBoundary>
   );
 };

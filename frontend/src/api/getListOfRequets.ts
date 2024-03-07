@@ -1,4 +1,4 @@
-import axios, { AxiosResponse } from "axios";
+import axios, { AxiosError, AxiosResponse } from "axios";
 
 export interface RequestQuery {
   id?: number;
@@ -40,6 +40,7 @@ export const getListOfRequests = async (data: URLSearchParams) => {
     );
     return requests;
   } catch (error) {
-    throw new Error("Ooops... Something went wron please try again later.");
+    const e = error as AxiosError;
+    throw new Error(`${e.message}: ${e.response?.statusText}`);
   }
 };

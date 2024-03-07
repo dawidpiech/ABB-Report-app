@@ -14,6 +14,7 @@ import { getListOfRequests, Request } from "../../api/getListOfRequets";
 import { LoadingSpinner } from "../LoadingSpinner/LoadingSpinner";
 import { format } from "date-fns";
 import { Pagination } from "../Pagination/Pagination";
+import { useThrowAsyncError } from "../../hooks/useThrowAsyncError";
 
 export const RequestList = () => {
   const [requests, setRequests] = useState<Request[]>([]);
@@ -21,6 +22,7 @@ export const RequestList = () => {
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
   const location = useLocation();
+  const throwAsyncError = useThrowAsyncError();
 
   const tableHeadings: string[] = [
     "Request ID",
@@ -36,17 +38,21 @@ export const RequestList = () => {
     const searchParams = new URLSearchParams(location.search);
     const fetchData = async () => {
       setIsLoading(true);
-      const response = await getListOfRequests(searchParams);
+      try {
+        const response = await getListOfRequests(searchParams);
 
-      if (response) {
-        setRequests(response.data.requests);
-        setCounter(response.data.count);
-      } else {
-        setRequests([]);
-        setCounter(0);
+        if (response) {
+          setRequests(response.data.requests);
+          setCounter(response.data.count);
+        } else {
+          setRequests([]);
+          setCounter(0);
+        }
+      } catch (error) {
+        throwAsyncError(error);
+      } finally {
+        setIsLoading(false);
       }
-
-      setIsLoading(false);
     };
 
     fetchData();

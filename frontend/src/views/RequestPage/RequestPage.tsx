@@ -15,7 +15,6 @@ import {
 } from "../../api/getListOfRequestFiles.ts";
 import { LoadingSpinner } from "../../components/LoadingSpinner/LoadingSpinner.tsx";
 import { useThrowAsyncError } from "../../hooks/useThrowAsyncError.tsx";
-import ErrorBoundary from "../../components/Error/ErrorBoundary.tsx";
 
 export const RequestPage = () => {
   const params = useParams();

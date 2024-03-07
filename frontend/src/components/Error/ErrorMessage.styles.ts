@@ -68,7 +68,7 @@ export const Content = styled.p`
 `;
 
 export const Message = styled.p`
-  font-size: 0.8rem;
+  font-size: 0.7rem;
   color: ${({ theme }) => theme.colors.brightRed};
   margin: 0;
 `;

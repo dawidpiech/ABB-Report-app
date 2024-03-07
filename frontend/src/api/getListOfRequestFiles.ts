@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 
 export interface File {
   FileUUID: string;
@@ -13,6 +13,7 @@ export const getListOfRequestFiles = async (id: string) => {
 
     return requestData;
   } catch (error) {
-    throw new Error("Ooops... Something went wron please try again later.");
+    const e = error as AxiosError;
+    throw new Error(`${e.message}: ${e.response?.statusText}`);
   }
 };
