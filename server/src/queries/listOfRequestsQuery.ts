@@ -72,10 +72,13 @@ const listOfRequestsQuery = (params: RequestsListQueryParams) => {
   const whereClause =
     conditions.length > 0 ? `WHERE ${conditions.join(" AND ")}` : "";
 
-  const listOfRequestsQuery = `SELECT 
+  const listOfRequestsQuery = `WITH Records AS (
+      SELECT 
+        ROW_NUMBER() OVER (ORDER BY R.RequestID DESC) AS ID,
         R.RequestID,
         R.WorkflowID AS WorkflowTypeID,
         W.NodeName AS WorkflowName,
+        R.FormData.value('(/FormData/Field[@ID="REQUEST_DATA_REQUEST_TITLE"]/Value/node())[1]','varchar(250)') AS RequestTitle,
         R.FormData.value('(/FormData/Field[@ID="MD_ADDR1_DATA__NAME1"]/Value/node())[1]','varchar(250)') AS CompanyName,
         R.FormData.value('(/FormData/Field[@ID="REQUEST_DECISION_SAP_SYSTEM"]/Value/node())[1]','varchar(250)') AS SAPCode,
         U.DisplayName AS RequestorName,
@@ -90,9 +93,24 @@ const listOfRequestsQuery = (params: RequestsListQueryParams) => {
       LEFT JOIN 
         WorkflowSpecification.WorkflowTree W ON R.WorkflowID = W.NodeID
       ${whereClause}
-      ORDER BY R.RequestID DESC
-      OFFSET ${params.page * 100 - 100} ROWS 
-      FETCH NEXT ${params.page * 100} ROWS ONLY;
+      )
+      SELECT
+        ID,
+        RequestID,
+        WorkflowTypeID,
+        SAPCode,
+        WorkflowName,
+        RequestTitle,
+        CompanyName,
+        RequestorName,
+        RequestorEmail,
+        OpenedAt,
+        ClosedAt
+      FROM 
+        Records
+      WHERE 
+        ID BETWEEN ${params.page * 100 - 100} AND ${params.page * 100}
+      ORDER BY RequestID ASC
       `;
 
   return listOfRequestsQuery;
