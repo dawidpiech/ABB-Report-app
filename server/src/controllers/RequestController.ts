@@ -112,7 +112,9 @@ class RequestController {
 
       const result = await convertToJSON(
         request[0].FormSpecification,
-        request[0].FormDataEnd,
+        request[0].FormDataEnd
+          ? request[0].FormDataEnd
+          : request[0].FormDataStart,
         request[0].InitialFormData
       );
 

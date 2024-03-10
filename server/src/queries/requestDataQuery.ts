@@ -92,6 +92,7 @@ const requestDataOnStepsQuery = (params: RequestDataOnStepParams) => {
     SELECT
 	  W.FormSpecification,
 	  R.FormDataEnd,
+    R.FormDataStart,
 	  R2.InitialFormData
     FROM WorkflowRuntime.RequestActivity R
     LEFT JOIN WorkflowSpecification.Workflow W ON R.ControlData.value('(/ControlData/WorkflowID/node())[1]','varchar(250)') = W.WorkflowID 

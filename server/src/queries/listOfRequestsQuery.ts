@@ -110,7 +110,6 @@ const listOfRequestsQuery = (params: RequestsListQueryParams) => {
         Records
       WHERE 
         ID BETWEEN ${params.page * 100 - 100} AND ${params.page * 100}
-      ORDER BY RequestID ASC
       `;
   return listOfRequestsQuery;
 };
