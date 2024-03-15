@@ -5,14 +5,13 @@ import { DatabaseError } from "../erros/DatabaseError";
 dotenv.config();
 
 const fileDbConfig: config = {
-  server: process.env.DB_SERVER ?? "",
-  database: process.env.DB_FILE_DB_ADRESS ?? "",
+  server: process.env.DB_SERVER_LIVE ?? "",
+  database: process.env.DB_REQUEST_DATA_DB_ADRESS_LIVE ?? "",
   authentication: {
-    type: "ntlm",
+    type: "default",
     options: {
-      userName: process.env.DB_USER_NAME ?? "",
-      password: process.env.DB_PASSWORD ?? "",
-      domain: process.env.DB_USER_DOMAIN ?? "",
+      userName: process.env.DB_USER_NAME_LIVE ?? "",
+      password: process.env.DB_PASSWORD_LIVE ?? "",
     },
   },
   options: {
@@ -22,20 +21,18 @@ const fileDbConfig: config = {
 };
 
 const requestsDbConfig: config = {
-  server: process.env.DB_SERVER ?? "",
-  database: process.env.DB_REQUEST_DATA_DB_ADRESS ?? "",
+  server: process.env.DB_SERVER_LIVE ?? "",
+  database: process.env.DB_REQUEST_DATA_DB_ADRESS_LIVE ?? "",
   authentication: {
-    type: "ntlm",
+    type: "default",
     options: {
-      userName: process.env.DB_USER_NAME ?? "",
-      password: process.env.DB_PASSWORD ?? "",
-      domain: process.env.DB_USER_DOMAIN ?? "",
+      userName: process.env.DB_USER_NAME_LIVE ?? "",
+      password: process.env.DB_PASSWORD_LIVE ?? "",
     },
   },
   options: {
     encrypt: true,
     trustServerCertificate: true,
-    requestTimeout: 120000,
   },
 };
 
