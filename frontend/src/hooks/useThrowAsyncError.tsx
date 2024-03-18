@@ -7,5 +7,6 @@ export const useThrowAsyncError = () => {
     setState(() => {
       throw error;
     });
+    console.log(state);
   };
 };

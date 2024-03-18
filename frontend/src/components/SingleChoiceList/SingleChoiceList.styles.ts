@@ -1,4 +1,3 @@
-import { GroupData } from "./../GroupData/GroupData";
 import styled from "styled-components";
 
 export const StyledLabel = styled.label`
