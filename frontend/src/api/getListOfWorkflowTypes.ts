@@ -9,7 +9,7 @@ interface WorkflowData {
 export const getListOfWorkflowTypes = async () => {
   try {
     const workflowTypes = await axios.get<WorkflowData[]>(
-      `${import.meta.env.VITE_API}/list/getListOfWorkflows`
+      `${process.env.VITE_API}/list/getListOfWorkflows`
     );
 
     const workflowTypesList: WorkFlowTypesList = Object.fromEntries(

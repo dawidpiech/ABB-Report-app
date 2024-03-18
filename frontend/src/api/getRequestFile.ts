@@ -3,7 +3,7 @@ import axios, { AxiosError } from "axios";
 export const getRequestFile = async (id: string) => {
   try {
     const requestData = await axios.get(
-      `${import.meta.env.VITE_API}/request/getRequestFile?id=${id}`
+      `${process.env.VITE_API}/request/getRequestFile?id=${id}`
     );
 
     return requestData;

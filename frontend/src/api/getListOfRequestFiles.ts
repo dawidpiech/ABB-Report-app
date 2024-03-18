@@ -8,7 +8,7 @@ export interface File {
 export const getListOfRequestFiles = async (id: string) => {
   try {
     const requestData = await axios.get<File[]>(
-      `${import.meta.env.VITE_API}/request/getRequestListOfFiles?id=${id}`
+      `${process.env.VITE_API}/request/getRequestListOfFiles?id=${id}`
     );
 
     return requestData;
