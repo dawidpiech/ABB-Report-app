@@ -6,6 +6,7 @@ import { NotFoundError } from "../erros/NotFoundError";
 import bodyParser from "body-parser";
 import cors from "cors";
 import dotenv from "dotenv";
+import mainRoutes from "../routes/mainRoutes";
 
 dotenv.config();
 
@@ -21,6 +22,7 @@ const ExpressConfig = (): Application => {
   app.use(bodyParser.json());
 
   //routes
+  app.use("/api", mainRoutes);
   app.use("/api/list", listOfRequestsRoutes);
   app.use("/api/request", requestData);
 

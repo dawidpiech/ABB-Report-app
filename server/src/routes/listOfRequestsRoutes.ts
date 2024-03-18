@@ -3,12 +3,6 @@ import RequestsListController from "../controllers/RequestsListController";
 
 const listOfRequestsRoutes = Router();
 
-listOfRequestsRoutes.get("/", (req, res) => {
-  return res.status(200).send({
-    message: "Hello World!",
-  });
-});
-
 listOfRequestsRoutes.get("/getListOfRequests", (req, res, next) => {
   RequestsListController.getListOfRequests(req, res, next);
 });
