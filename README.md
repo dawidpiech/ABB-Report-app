@@ -22,7 +22,7 @@ The application uses a database based on SQL Server.
 
 ## Demo
 
-https://abb-retention-tool.piech.it/
+[https://abb-retention-tool.piech.it/](https://abb-retention-tool.piech.it/)
 
 ## Installation
 
