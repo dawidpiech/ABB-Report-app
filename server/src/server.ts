@@ -17,3 +17,5 @@ try {
 } catch (error: any) {
   console.error(`Error occurred during server startup: ${error.message}`);
 }
+
+export default app;

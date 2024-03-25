@@ -8,8 +8,8 @@
     "sourceMap": true,
     "noImplicitAny": true,
     "strict": true,
-    "forceConsistentCasingInFileNames": true,
+    "forceConsistentCasingInFileNames": true
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "./api/*.ts"],
   "exclude": ["node_modules"]
 }
