@@ -24,6 +24,8 @@ The application uses a database based on SQL Server.
 
 <a href="https://abb-retention-tool.piech.it/" target="_blank" rel="noreferrer noopener">https://abb-retention-tool.piech.it/</a>
 
+[https://abb-retention-tool.piech.it/](https://abb-retention-tool.piech.it/){:target="\_blank"}
+
 ## Installation
 
 To install this project you have to run both instances (Client side and Server API) in separate servers. Download whole repository and follow instructions:
