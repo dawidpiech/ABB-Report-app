@@ -8,10 +8,15 @@ import { useState, useEffect } from "react";
 
 interface StepNavigationProps {
   steps: RequestStep[];
+  activeStep: number;
+  handleSetActiveStep: (index: number) => void;
 }
 
-export const RequestStepNavigation = ({ steps }: StepNavigationProps) => {
-  const { stepID } = useParams();
+export const RequestStepNavigation = ({
+  steps,
+  activeStep,
+  handleSetActiveStep,
+}: StepNavigationProps) => {
   const [isMouseDown, setIsMouseDown] = useState(false);
   const [startX, setStartX] = useState(0);
   const [startScrollLeft, setStartScrollLeft] = useState(0);
@@ -67,7 +72,10 @@ export const RequestStepNavigation = ({ steps }: StepNavigationProps) => {
         <StepWrapper
           key={index}
           to={`/request/${e.RequestID}/${e.WorkflowTransitionID}`}
-          $isActive={stepID === String(e.WorkflowTransitionID)}
+          onClick={() => {
+            handleSetActiveStep(index);
+          }}
+          $isActive={activeStep === index}
         >
           {e.WorkflowTransitionName}
         </StepWrapper>

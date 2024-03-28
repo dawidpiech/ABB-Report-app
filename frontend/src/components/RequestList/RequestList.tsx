@@ -15,6 +15,7 @@ import { LoadingSpinner } from "../LoadingSpinner/LoadingSpinner";
 import { format } from "date-fns";
 import { Pagination } from "../Pagination/Pagination";
 import { useThrowAsyncError } from "../../hooks/useThrowAsyncError";
+import { useIsAuthenticated } from "@azure/msal-react";
 
 export const RequestList = () => {
   const [requests, setRequests] = useState<Request[]>([]);

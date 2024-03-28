@@ -9,6 +9,9 @@ import { NotFoundPage } from "./views/NotFoundPage/NotFoundPage.tsx";
 import { Layout } from "./components/Layout/Layout.tsx";
 import { RequestPage } from "./views/RequestPage/RequestPage.tsx";
 import ErrorBoundary from "./components/Error/ErrorBoundary.tsx";
+import { PublicClientApplication } from "@azure/msal-browser";
+import { MsalProvider } from "@azure/msal-react";
+import { msalConfig } from "./config/azureConfig.ts";
 
 const router = createBrowserRouter([
   {
@@ -40,11 +43,15 @@ const router = createBrowserRouter([
   },
 ]);
 
+const msalInstance = new PublicClientApplication(msalConfig);
+
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <ThemeProvider theme={theme}>
-      <GlobalStyle />
-      <RouterProvider router={router}></RouterProvider>
-    </ThemeProvider>
+    <MsalProvider instance={msalInstance}>
+      <ThemeProvider theme={theme}>
+        <GlobalStyle />
+        <RouterProvider router={router}></RouterProvider>
+      </ThemeProvider>
+    </MsalProvider>
   </React.StrictMode>
 );

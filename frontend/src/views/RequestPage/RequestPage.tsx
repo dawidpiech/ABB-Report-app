@@ -19,6 +19,7 @@ import { useThrowAsyncError } from "../../hooks/useThrowAsyncError.tsx";
 export const RequestPage = () => {
   const params = useParams();
   const [isLoading, setIsLoading] = useState(false);
+  const [activeStep, setActiveStep] = useState(0);
   const [requestData, setRequestData] = useState<{
     data: View[];
     steps: RequestStep[];
@@ -29,6 +30,10 @@ export const RequestPage = () => {
     files: [],
   });
   const throwAsyncError = useThrowAsyncError();
+
+  const handleSetActiveStep = (index: number) => {
+    setActiveStep(index);
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -82,7 +87,11 @@ export const RequestPage = () => {
     <LoadingSpinner></LoadingSpinner>
   ) : (
     <>
-      <RequestStepNavigation steps={requestData.steps}></RequestStepNavigation>
+      <RequestStepNavigation
+        steps={requestData.steps}
+        activeStep={activeStep}
+        handleSetActiveStep={handleSetActiveStep}
+      ></RequestStepNavigation>
       <RequestData
         data={requestData.data}
         files={requestData.files}
