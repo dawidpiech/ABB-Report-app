@@ -1,5 +1,4 @@
 import { Router } from "express";
-import RequestsListController from "../controllers/RequestsListController";
 
 const mainRoutes = Router();
 

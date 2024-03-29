@@ -1,0 +1,15 @@
+export const config = {
+  identityMetadata: `https://login.microsoftonline.com/${process.env.AZURE_TENANT_ID}/.well-known/openid-configuration`,
+  clientID: process.env.AZURE_CLIENT_ID || "",
+  clientSecret: process.env.AZURE_CLIENT_SECRET || "",
+  responseType: "code",
+  responseMode: "form_post",
+  redirectUrl: "http://localhost:3000/auth/openid/return",
+  allowHttpForRedirectUrl: true,
+  validateIssuer: false,
+  loggingLevel: "info",
+  loggingNoPII: false,
+  tenantID: process.env.AZURE_TENANT_ID,
+  issuer: `https://login.microsoftonline.com/${process.env.AZURE_TENANT_ID}/v1.0`,
+  audience: `https://${process.env.AZURE_TENANT_ID}.onmicrosoft.com/9fc847b6-92d0-4739-9eb1-6201752d6af1`,
+};
