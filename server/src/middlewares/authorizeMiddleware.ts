@@ -2,40 +2,55 @@ import passport from "passport";
 import { BearerStrategy } from "passport-azure-ad";
 import { config } from "../config/configAzureEntraID";
 import { Request, Response, NextFunction } from "express";
+import { UnauthorizedUserError } from "../erros/UnuthorizedUserError";
+
+passport.initialize();
 
 passport.use(
   new BearerStrategy(
     {
       identityMetadata: config.identityMetadata,
       clientID: config.clientID,
-      validateIssuer: false,
-      passReqToCallback: false,
+      issuer: config.issuer,
+      audience: config.clientID,
+      validateIssuer: true,
+      passReqToCallback: true,
+      loggingLevel: "error",
+      loggingNoPII: false,
+      allowMultiAudiencesInToken: false,
     },
-    (token, done) => {
-      // Tutaj sprawdzamy token i rolę użytkownika
-      // Jeżeli użytkownik ma odpowiednią rolę, wywołujemy done() z null jako błędem
-      // W przeciwnym razie wywołujemy done() z błędem
+    (req, token, done) => {
+      if (token.roles && token.roles.includes("Reader")) {
+        return done(null, token);
+      } else {
+        return done(
+          new UnauthorizedUserError(
+            "You don't have permissions to this resource."
+          ),
+          null
+        );
+      }
     }
   )
 );
 
-// const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
-//   // passport.authenticate(
-//   //   "oauth-bearer",
-//   //   { session: false },
-//   //   (err: Error, user: any) => {
-//   //     if (err) {
-//   //       return res.status(500).json({ error: "Internal Server Error" });
-//   //     }
-//   //     if (!user) {
-//   //       return res.status(401).json({ error: "Unauthorized" });
-//   //     }
-//   //     // Jeśli użytkownik jest uwierzytelniony, dodaj token do obiektu żądania
-//   //     (req as any).token = user;
-//   //     next();
-//   //   }
-//   // )(req, res, next);
-//   next();
-// };
+const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
+  passport.authenticate(
+    "oauth-bearer",
+    { session: false },
+    (err: Error, user: any, info: any) => {
+      if (err) {
+        next(
+          new UnauthorizedUserError(`Somethig went wrong during authorization.`)
+        );
+      }
+      if (!user) {
+        next(new UnauthorizedUserError(`The user was not recognized.`));
+      }
+      req.user = user;
+      next();
+    }
+  )(req, res, next);
+};
 
-// export { authMiddleware };
+export { authMiddleware };

@@ -10,6 +10,6 @@ export const config = {
   loggingLevel: "info",
   loggingNoPII: false,
   tenantID: process.env.AZURE_TENANT_ID,
-  issuer: `https://login.microsoftonline.com/${process.env.AZURE_TENANT_ID}/v1.0`,
+  issuer: `https://sts.windows.net/${process.env.AZURE_TENANT_ID}/`,
   audience: `https://${process.env.AZURE_TENANT_ID}.onmicrosoft.com/9fc847b6-92d0-4739-9eb1-6201752d6af1`,
 };
