@@ -11,13 +11,13 @@ passport.use(
     {
       identityMetadata: config.identityMetadata,
       clientID: config.clientID,
+      validateIssuer: config.validateIssuer,
+      passReqToCallback: config.passReqToCallback,
       issuer: config.issuer,
       audience: config.clientID,
-      validateIssuer: true,
-      passReqToCallback: true,
-      loggingLevel: "error",
-      loggingNoPII: false,
-      allowMultiAudiencesInToken: false,
+      loggingLevel: config.loggingLevel,
+      loggingNoPII: config.loggingNoPII,
+      allowMultiAudiencesInToken: config.allowMultiAudiencesInToken,
     },
     (req, token, done) => {
       if (token.roles && token.roles.includes("Reader")) {
