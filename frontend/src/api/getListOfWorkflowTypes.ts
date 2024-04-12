@@ -6,10 +6,15 @@ interface WorkflowData {
   NodeName: string;
 }
 
-export const getListOfWorkflowTypes = async () => {
+export const getListOfWorkflowTypes = async (token: string) => {
+  const headers = {
+    Authorization: `Bearer ${token}`,
+  };
+
   try {
     const workflowTypes = await axios.get<WorkflowData[]>(
-      `${import.meta.env.VITE_API}/list/getListOfWorkflows`
+      `${import.meta.env.VITE_API}/list/getListOfWorkflows`,
+      { headers: headers }
     );
 
     const workflowTypesList: WorkFlowTypesList = Object.fromEntries(

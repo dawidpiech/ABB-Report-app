@@ -15,6 +15,7 @@ import {
 } from "../../api/getListOfRequestFiles.ts";
 import { LoadingSpinner } from "../../components/LoadingSpinner/LoadingSpinner.tsx";
 import { useThrowAsyncError } from "../../hooks/useThrowAsyncError.tsx";
+import { useAuth } from "../../hooks/useAuth.ts";
 
 export const RequestPage = () => {
   const params = useParams();
@@ -30,6 +31,7 @@ export const RequestPage = () => {
     files: [],
   });
   const throwAsyncError = useThrowAsyncError();
+  const { accessToken, accessTokenLoaded } = useAuth();
 
   const handleSetActiveStep = (index: number) => {
     setActiveStep(index);
@@ -42,13 +44,17 @@ export const RequestPage = () => {
         if (params.stepID && params.id) {
           const responseData = await getRequestDataOnStep(
             params.id,
-            params.stepID
+            params.stepID,
+            accessToken
           );
-          const responseFiles = await getListOfRequestFiles(params.id);
+          const responseFiles = await getListOfRequestFiles(
+            params.id,
+            accessToken
+          );
           const responseSteps =
             requestData.steps.length !== 0
               ? { data: requestData.steps }
-              : await getListOfRequestSteps(params.id);
+              : await getListOfRequestSteps(params.id, accessToken);
           if (responseData && responseFiles && responseSteps) {
             setRequestData({
               data: responseData.data,
@@ -58,12 +64,18 @@ export const RequestPage = () => {
           }
         } else {
           if (params.id) {
-            const responseData = await getRequestInitialData(params.id);
-            const responseFiles = await getListOfRequestFiles(params.id);
+            const responseData = await getRequestInitialData(
+              params.id,
+              accessToken
+            );
+            const responseFiles = await getListOfRequestFiles(
+              params.id,
+              accessToken
+            );
             const responseSteps =
               requestData.steps.length !== 0
                 ? { data: requestData.steps }
-                : await getListOfRequestSteps(params.id);
+                : await getListOfRequestSteps(params.id, accessToken);
             if (responseData && responseFiles && responseSteps) {
               setRequestData({
                 data: responseData.data,
@@ -76,12 +88,12 @@ export const RequestPage = () => {
       } catch (error) {
         throwAsyncError(error);
       } finally {
-        setIsLoading(false);
+        if (accessTokenLoaded) setIsLoading(false);
       }
     };
 
-    fetchData();
-  }, [params]);
+    if (accessTokenLoaded) fetchData();
+  }, [params, accessTokenLoaded]);
 
   return isLoading ? (
     <LoadingSpinner></LoadingSpinner>

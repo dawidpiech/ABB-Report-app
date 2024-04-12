@@ -28,10 +28,15 @@ export interface Value {
   isNewValue?: boolean;
 }
 
-export const getRequestInitialData = async (id: string) => {
+export const getRequestInitialData = async (id: string, token: string) => {
+  const headers = {
+    Authorization: `Bearer ${token}`,
+  };
+
   try {
     const requestData = await axios.get<View[]>(
-      `${import.meta.env.VITE_API}/request/getRequestData?id=${id}`
+      `${import.meta.env.VITE_API}/request/getRequestData?id=${id}`,
+      { headers: headers }
     );
 
     return requestData;

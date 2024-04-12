@@ -15,7 +15,7 @@ import { LoadingSpinner } from "../LoadingSpinner/LoadingSpinner";
 import { format } from "date-fns";
 import { Pagination } from "../Pagination/Pagination";
 import { useThrowAsyncError } from "../../hooks/useThrowAsyncError";
-import { useIsAuthenticated } from "@azure/msal-react";
+import { useAuth } from "../../hooks/useAuth";
 
 export const RequestList = () => {
   const [requests, setRequests] = useState<Request[]>([]);
@@ -24,6 +24,7 @@ export const RequestList = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const throwAsyncError = useThrowAsyncError();
+  const { accessToken, accessTokenLoaded } = useAuth();
 
   const tableHeadings: string[] = [
     "Request ID",
@@ -40,7 +41,7 @@ export const RequestList = () => {
     const fetchData = async () => {
       setIsLoading(true);
       try {
-        const response = await getListOfRequests(searchParams);
+        const response = await getListOfRequests(searchParams, accessToken);
 
         if (response) {
           setRequests(response.data.requests);
@@ -56,8 +57,8 @@ export const RequestList = () => {
       }
     };
 
-    fetchData();
-  }, [navigate, location.search, location.pathname]);
+    if (accessTokenLoaded) fetchData();
+  }, [navigate, location.search, location.pathname, accessTokenLoaded]);
 
   return (
     <>

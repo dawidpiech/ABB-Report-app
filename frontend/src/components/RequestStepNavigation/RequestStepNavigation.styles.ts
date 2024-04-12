@@ -6,9 +6,10 @@ interface StepWrapperProps {
 }
 
 export const RequestStepNavigationWrapper = styled.div`
-  margin-top: 40px;
+  margin-top: 10px;
   z-index: 0;
   overflow-x: hidden;
+  position: relative;
   height: 100px;
   display: flex;
   flex-wrap: nowrap;
@@ -55,4 +56,8 @@ export const StepWrapper = styled(Link)<StepWrapperProps>`
       : ({ theme }) => theme.colors.black};
   border-bottom: 5px ${({ theme }) => theme.colors.red} solid;
   font-size: 0.8rem;
+`;
+
+export const SlideInfo = styled.div`
+  margin: 20px 10px 0 0;
 `;

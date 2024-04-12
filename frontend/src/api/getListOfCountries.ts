@@ -6,10 +6,15 @@ interface CountryData {
   CountryName: string;
 }
 
-export const getListOfCountries = async () => {
+export const getListOfCountries = async (token: string) => {
+  const headers = {
+    Authorization: `Bearer ${token}`,
+  };
+
   try {
     const countries = await axios.get<CountryData[]>(
-      `${import.meta.env.VITE_API}/list/getListOfSapCountry`
+      `${import.meta.env.VITE_API}/list/getListOfSapCountry`,
+      { headers: headers }
     );
 
     const countriesList: CountriesList = Object.fromEntries(

@@ -20,7 +20,9 @@ export const Layout = () => {
   };
 
   const handleLogin = () => {
-    instance.loginRedirect(loginRequest).catch(() => {});
+    instance.loginRedirect(loginRequest).catch((e) => {
+      throw new Error(`${e.message}: ${e.response?.statusText}`);
+    });
   };
 
   return (

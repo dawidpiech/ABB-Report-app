@@ -1,10 +1,10 @@
-import { useParams } from "react-router-dom";
 import {
   RequestStepNavigationWrapper,
+  SlideInfo,
   StepWrapper,
 } from "./RequestStepNavigation.styles";
 import { RequestStep } from "../../api/getListOfRequestSteps";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 interface StepNavigationProps {
   steps: RequestStep[];
@@ -21,6 +21,8 @@ export const RequestStepNavigation = ({
   const [startX, setStartX] = useState(0);
   const [startScrollLeft, setStartScrollLeft] = useState(0);
   const [hasMovedEnough, setHasMovedEnough] = useState(false);
+
+  const navigationRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleMouseUp = () => {
@@ -64,22 +66,26 @@ export const RequestStepNavigation = ({
   };
 
   return (
-    <RequestStepNavigationWrapper
-      onMouseDown={handleMouseDown}
-      onMouseMove={handleMouseMove}
-    >
-      {steps.map((e, index) => (
-        <StepWrapper
-          key={index}
-          to={`/request/${e.RequestID}/${e.WorkflowTransitionID}`}
-          onClick={() => {
-            handleSetActiveStep(index);
-          }}
-          $isActive={activeStep === index}
-        >
-          {e.WorkflowTransitionName}
-        </StepWrapper>
-      ))}
-    </RequestStepNavigationWrapper>
+    <>
+      <SlideInfo>Click and swipe left to see the remaining steps. </SlideInfo>
+      <RequestStepNavigationWrapper
+        onMouseDown={handleMouseDown}
+        onMouseMove={handleMouseMove}
+        ref={navigationRef}
+      >
+        {steps.map((e, index) => (
+          <StepWrapper
+            key={index}
+            to={`/request/${e.RequestID}/${e.WorkflowTransitionID}`}
+            onClick={() => {
+              handleSetActiveStep(index);
+            }}
+            $isActive={activeStep === index}
+          >
+            {e.WorkflowTransitionName}
+          </StepWrapper>
+        ))}
+      </RequestStepNavigationWrapper>
+    </>
   );
 };

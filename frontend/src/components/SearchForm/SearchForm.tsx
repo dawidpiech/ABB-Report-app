@@ -13,6 +13,7 @@ import { LoadingSpinner } from "../LoadingSpinner/LoadingSpinner";
 import "react-datepicker/dist/react-datepicker.css";
 import { format } from "date-fns";
 import { useThrowAsyncError } from "../../hooks/useThrowAsyncError";
+import { useAuth } from "../../hooks/useAuth";
 export interface CountriesList {
   [key: string]: string;
 }
@@ -40,21 +41,24 @@ export const SearchForm = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const throwAsyncError = useThrowAsyncError();
+  const { accessToken, accessTokenLoaded } = useAuth();
 
   useEffect(() => {
-    setFormValues();
-    fetchData();
-  }, []);
+    if (accessTokenLoaded) {
+      setFormValues();
+      fetchData();
+    }
+  }, [accessTokenLoaded]);
 
   useEffect(() => {
-    setFormValues();
-  }, [navigate, location.search, location.pathname]);
+    if (accessTokenLoaded) setFormValues();
+  }, [navigate, location.search, location.pathname, accessTokenLoaded]);
 
   const fetchData = async () => {
     setIsLoading(true);
     try {
-      const countriesList = await getListOfCountries();
-      const workflowTypesList = await getListOfWorkflowTypes();
+      const countriesList = await getListOfCountries(accessToken);
+      const workflowTypesList = await getListOfWorkflowTypes(accessToken);
 
       if (countriesList) setCountries(countriesList);
       if (workflowTypesList) setWorkflowTypes(workflowTypesList);
@@ -231,13 +235,13 @@ export const SearchForm = () => {
           onChange={(e) => handleFieldChange("email", e.target.value)}
         />
         <FieldGroup
-          name="Request Opened"
+          name="Submited on"
           error={requestOpenedDateError === "" ? false : true}
           width={50}
           errorMessage={requestOpenedDateError}
         >
           <DatePicker
-            label="Start Date"
+            label="From"
             value={
               requestOpenedStartDate ? new Date(requestOpenedStartDate) : null
             }
@@ -250,7 +254,7 @@ export const SearchForm = () => {
             }
           />
           <DatePicker
-            label="End Date"
+            label="To"
             width={50}
             value={requestOpenedEndDate ? new Date(requestOpenedEndDate) : null}
             onChange={(date) =>
@@ -262,13 +266,13 @@ export const SearchForm = () => {
           />
         </FieldGroup>
         <FieldGroup
-          name="Request Closed"
+          name="Closed on"
           width={50}
           error={requestClosedDateError === "" ? false : true}
           errorMessage={requestClosedDateError}
         >
           <DatePicker
-            label="Start Date"
+            label="From"
             width={50}
             value={
               requestClosedStartDate ? new Date(requestClosedStartDate) : null
@@ -281,7 +285,7 @@ export const SearchForm = () => {
             }
           />
           <DatePicker
-            label="End Date"
+            label="To"
             width={50}
             value={requestClosedEndDate ? new Date(requestClosedEndDate) : null}
             onChange={(date) =>

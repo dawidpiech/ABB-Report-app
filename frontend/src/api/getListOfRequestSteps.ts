@@ -8,10 +8,15 @@ export interface RequestStep {
   WorkflowTransitionName: string;
 }
 
-export const getListOfRequestSteps = async (id: string) => {
+export const getListOfRequestSteps = async (id: string, token: string) => {
+  const headers = {
+    Authorization: `Bearer ${token}`,
+  };
+
   try {
     const requestData = await axios.get<RequestStep[]>(
-      `${import.meta.env.VITE_API}/request/getListOfRequestSteps?id=${id}`
+      `${import.meta.env.VITE_API}/request/getListOfRequestSteps?id=${id}`,
+      { headers: headers }
     );
 
     return requestData;

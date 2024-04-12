@@ -13,6 +13,7 @@ import { getRequestFile } from "../../api/getRequestFile";
 import { useState } from "react";
 import { useThrowAsyncError } from "../../hooks/useThrowAsyncError";
 import ErrorBoundary from "../Error/ErrorBoundary";
+import { useAuth } from "../../hooks/useAuth";
 
 interface FieldProps {
   value: Field;
@@ -22,11 +23,12 @@ interface FieldProps {
 export const FileUpload = ({ value, listOfFiles }: FieldProps) => {
   const [isLoading, setIsLoading] = useState(false);
   const throwAsyncError = useThrowAsyncError();
+  const { accessToken } = useAuth();
 
   const downloadFile = async (id: string, fileName: string): Promise<void> => {
     try {
       setIsLoading(true);
-      const response = await getRequestFile(id);
+      const response = await getRequestFile(id, accessToken);
 
       if (response) {
         const fileData = response.data[0].File;

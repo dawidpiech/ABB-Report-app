@@ -31,12 +31,20 @@ export interface Request {
   ClosedAt: string | null;
 }
 
-export const getListOfRequests = async (data: URLSearchParams) => {
+export const getListOfRequests = async (
+  data: URLSearchParams,
+  token: string
+) => {
   try {
+    const headers = {
+      Authorization: `Bearer ${token}`,
+    };
+
     const requests: AxiosResponse = await axios.get<RequestData>(
       `${import.meta.env.VITE_API}/list/getListOfRequests`,
       {
         params: Object.fromEntries(data.entries()),
+        headers: headers,
       }
     );
     return requests;
