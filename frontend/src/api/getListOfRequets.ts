@@ -1,4 +1,3 @@
-import { useIsAuthenticated } from "@azure/msal-react";
 import axios, { AxiosError, AxiosResponse } from "axios";
 
 export interface RequestQuery {
