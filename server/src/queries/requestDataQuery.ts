@@ -1,4 +1,6 @@
-import requestData from "routes/requestDataRoutes";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 interface RequestDataParams {
   id?: number | undefined;
@@ -118,9 +120,9 @@ const requestListOfFilesQuery = (params: RequestListOfFilesParams) => {
     SELECT 
       ValueNode.value('(text())[1]', 'varchar(250)') AS FileUUID,
       FileTable.Filename
-    FROM [ABB Global - MDM Enterprise 2.0_BAR2].[WorkflowRuntime].[Request]
+    FROM [${process.env.DB_FILE_DB_ADRESS}].[WorkflowRuntime].[Request]
     CROSS APPLY FormData.nodes('/FormData/Field[@ID="REQUEST_DATA_SUPPORTING_DOCUMENTS"]/Value') AS FieldNodes(ValueNode)
-    LEFT JOIN [ABB Global - MDM Enterprise 2.0 - Filestore_BAR2].[Storage].[File] AS FileTable
+    LEFT JOIN [${process.env.DB_FILE_DB_ADRESS}].[Storage].[File] AS FileTable
         ON ValueNode.value('(text())[1]', 'varchar(250)') = FileTable.FileUUID
 	  ${whereClause}`;
   return requestListOfFilesQuery;

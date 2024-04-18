@@ -7,9 +7,7 @@ import bodyParser from "body-parser";
 import cors from "cors";
 import dotenv from "dotenv";
 import mainRoutes from "../routes/mainRoutes";
-import passport from "passport";
 import { authMiddleware } from "../middlewares/authorizeMiddleware";
-import { BearerStrategy } from "passport-azure-ad";
 
 dotenv.config();
 

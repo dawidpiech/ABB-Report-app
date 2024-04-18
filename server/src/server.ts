@@ -1,6 +1,6 @@
 import ExpressConfig from "./express/express.config";
 import dotenv from "dotenv";
-import { databaseConnect } from "../src/config/configDatabase";
+import { databaseConnect } from "./config/configDatabase";
 
 const app = ExpressConfig();
 
