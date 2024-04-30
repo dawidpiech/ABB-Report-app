@@ -111,6 +111,7 @@ const listOfRequestsQuery = (params: RequestsListQueryParams) => {
       WHERE 
         ID BETWEEN ${params.page * 100 - 100} AND ${params.page * 100}
       `;
+
   return listOfRequestsQuery;
 };
 

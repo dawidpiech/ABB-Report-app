@@ -70,6 +70,7 @@ const listOfStepsRequestQuery = (params: ListOfStepsRequestParams) => {
       AND R.WorkflowTransitionID = W.WorkflowTransitionID
     ${whereClause}
     ORDER BY R.RequestID ASC`;
+
   return listOfStepsRequestQuery;
 };
 

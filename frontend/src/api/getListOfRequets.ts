@@ -33,7 +33,7 @@ export interface Request {
 export const getListOfRequests = async (data: URLSearchParams) => {
   try {
     const requests: AxiosResponse = await axios.get<RequestData>(
-      `${process.env.VITE_API}/list/getListOfRequests`,
+      `${import.meta.env.VITE_API}/list/getListOfRequests`,
       {
         params: Object.fromEntries(data.entries()),
       }

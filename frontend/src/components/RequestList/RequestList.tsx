@@ -41,6 +41,8 @@ export const RequestList = () => {
       try {
         const response = await getListOfRequests(searchParams);
 
+        console.log(response);
+
         if (response) {
           setRequests(response.data.requests);
           setCounter(response.data.count);

@@ -31,7 +31,7 @@ export interface Value {
 export const getRequestInitialData = async (id: string) => {
   try {
     const requestData = await axios.get<View[]>(
-      `${process.env.VITE_API}/request/getRequestData?id=${id}`
+      `${import.meta.env.VITE_API}/request/getRequestData?id=${id}`
     );
 
     return requestData;
