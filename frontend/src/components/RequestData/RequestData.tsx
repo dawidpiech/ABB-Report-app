@@ -28,7 +28,11 @@ export const RequestData = ({ data, files }: RequestDataProps) => {
     for (const group of view.groups) {
       for (const section of group.sections) {
         for (const field of section.fields) {
-          if (field.values.length > 0 && field.values[0].value !== "") {
+          if (
+            field.values &&
+            field.values.length > 0 &&
+            field.values[0].value !== ""
+          ) {
             viewHaveValues = true;
             break;
           }

@@ -72,6 +72,7 @@ class RequestController {
       const queryResult = await queryRequestData(
         listOfStepsRequestQuery(params)
       );
+
       const result = queryResult.recordset;
 
       res.status(200).json(result);

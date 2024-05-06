@@ -16,13 +16,13 @@ export const SingleChoiceList = ({ value }: FieldProps) => {
       <StyledLabel>{value.nameOfField}:</StyledLabel>
       <StyledValue>
         <StyledRadio></StyledRadio>
-        <span>{value.values[0].value}</span>
-        {value.values[0].isModified ? (
+        <span>{value.values ? value.values[0].value : ""}</span>
+        {value.values && value.values[0].isModified ? (
           <StyledNewValue>New Value</StyledNewValue>
         ) : (
           ""
         )}
-        {value.values[0].isModified ? (
+        {value.values && value.values[0].isModified ? (
           <>
             <StyledRadio></StyledRadio>
             <span>{value.values[0].isModified}</span>

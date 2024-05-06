@@ -120,7 +120,12 @@ export const convertViewToObject = (
   requestFieldsValues: FormValues
 ): ViewData => {
   const viewData: ViewData = {
-    nameOfView: "HeaderText" in view ? view.HeaderText[0] : "",
+    nameOfView:
+      "HeaderText" in view
+        ? typeof view.HeaderText[0] === "string"
+          ? view.HeaderText[0]
+          : view.HeaderText[0]._
+        : "",
     groups: [],
   };
 

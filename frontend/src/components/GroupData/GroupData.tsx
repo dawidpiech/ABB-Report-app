@@ -14,7 +14,12 @@ export const GroupData = ({ group, files }: GroupDataProps) => {
 
   for (const section of group.sections) {
     for (const field of section.fields) {
-      if (field.values.length > 0 && field.values[0].value !== "") {
+      if (
+        field.values &&
+        field.values.length > 0 &&
+        field.values[0].value &&
+        field.values[0].value !== ""
+      ) {
         groupHaveValues = true;
         break;
       }
