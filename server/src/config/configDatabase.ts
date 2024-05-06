@@ -8,7 +8,7 @@ const fileDbConfig: config = {
   server: process.env.DB_SERVER ?? "",
   database: process.env.DB_FILE_DB_ADRESS ?? "",
   authentication: {
-    type: "ntlm",
+    type: process.env.DB_AUTHENTICATION_TYPE,
     options: {
       userName: process.env.DB_USER_NAME ?? "",
       password: process.env.DB_PASSWORD ?? "",
@@ -25,7 +25,7 @@ const requestsDbConfig: config = {
   server: process.env.DB_SERVER ?? "",
   database: process.env.DB_REQUEST_DATA_DB_ADRESS ?? "",
   authentication: {
-    type: "ntlm",
+    type: process.env.DB_AUTHENTICATION_TYPE,
     options: {
       userName: process.env.DB_USER_NAME ?? "",
       password: process.env.DB_PASSWORD ?? "",
