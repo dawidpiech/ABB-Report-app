@@ -11,25 +11,28 @@ interface FieldProps {
 }
 
 export const SingleLineTextField = ({ value }: FieldProps) => {
-  if (value.nameOfField === "Organization Helper") console.log(value);
   return (
     <>
       <StyledLabel>{value.nameOfField}:</StyledLabel>
-      <StyledValue>
-        {value.values[0].value}
-        {value.values[0].isModified ? (
-          <StyledOldValue>
-            <span>Old Value:</span> {value.values[0].isModified}
-          </StyledOldValue>
-        ) : (
-          ""
-        )}
-        {value.values[0].isNewValue ? (
-          <StyledNewValue>New Value</StyledNewValue>
-        ) : (
-          ""
-        )}
-      </StyledValue>
+      {value.values ? (
+        <StyledValue>
+          {value.values[0].value}
+          {value.values[0].isModified ? (
+            <StyledOldValue>
+              <span>Old Value:</span> {value.values[0].isModified}
+            </StyledOldValue>
+          ) : (
+            ""
+          )}
+          {value.values[0].isNewValue ? (
+            <StyledNewValue>New Value</StyledNewValue>
+          ) : (
+            ""
+          )}
+        </StyledValue>
+      ) : (
+        ""
+      )}
     </>
   );
 };

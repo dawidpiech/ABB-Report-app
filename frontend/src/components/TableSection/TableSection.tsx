@@ -44,7 +44,11 @@ export const TableSection = ({ data }: TableSectionProps) => {
               >
                 {data.map((value, index) => (
                   <TableSectionTd key={index}>
-                    {value.values[rowIndex].value}
+                    {value.values &&
+                    Object.getOwnPropertyNames(value.values[rowIndex])
+                      .length === 0
+                      ? value.values[rowIndex].value
+                      : ""}
                   </TableSectionTd>
                 ))}
               </TableSectionTr>

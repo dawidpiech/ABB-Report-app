@@ -209,7 +209,9 @@ const convertFieldsToObject = (
     } else {
       const convertedField: FieldData = {
         typeOfField: Object.keys(field)[1],
-        nameOfField: field[Object.keys(field)[1]][0].LabelText[0],
+        nameOfField: field[Object.keys(field)[1]][0].LabelText
+          ? field[Object.keys(field)[1]][0].LabelText[0]
+          : "",
         values: requestFieldsValues[field.$.ID],
       };
 
