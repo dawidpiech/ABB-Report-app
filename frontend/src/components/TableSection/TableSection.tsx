@@ -28,7 +28,8 @@ export const TableSection = ({ data }: TableSectionProps) => {
         </TableSectionThead>
         <TableSectionTbody>
           {data[0].values.map((row, rowIndex, array) =>
-            array.length === 1 && row.value === "" ? (
+            (array.length === 1 && row.value === "") ||
+            Object.keys(row).length === 0 ? (
               <TableSectionTr
                 key={rowIndex}
                 $background={rowIndex % 2 === 0 ? false : true}
@@ -44,11 +45,7 @@ export const TableSection = ({ data }: TableSectionProps) => {
               >
                 {data.map((value, index) => (
                   <TableSectionTd key={index}>
-                    {value.values &&
-                    Object.getOwnPropertyNames(value.values[rowIndex])
-                      .length === 0
-                      ? value.values[rowIndex].value
-                      : ""}
+                    {value.values ? value.values[rowIndex].value : ""}
                   </TableSectionTd>
                 ))}
               </TableSectionTr>
