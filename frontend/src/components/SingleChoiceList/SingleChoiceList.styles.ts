@@ -11,9 +11,9 @@ export const StyledValue = styled.div`
 `;
 
 export const StyledNewValue = styled.span`
-  display: block;
   font-size: 0.8rem;
-  color: ${({ theme }) => theme.colors.green};
+  margin: 0 10px 0 20px;
+  color: ${({ theme }) => theme.colors.red};
 `;
 
 export const StyledRadio = styled.span`

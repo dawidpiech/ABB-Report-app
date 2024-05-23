@@ -27,22 +27,22 @@ export const Layout = () => {
 
   return (
     <>
-      <UnauthenticatedTemplate>
+      {/* <UnauthenticatedTemplate>
         <Header></Header>
         <Login handleLogin={handleLogin}></Login>
         <Footer></Footer>
       </UnauthenticatedTemplate>
-      <AuthenticatedTemplate>
-        <Header
-          userName={accounts.length > 0 ? accounts[0].name : ""}
-          userMail={accounts.length > 0 ? accounts[0].username : ""}
-          logout={handleLogout}
-        ></Header>
-        <MainContent>
-          <Outlet />
-        </MainContent>
-        <Footer></Footer>
-      </AuthenticatedTemplate>
+      <AuthenticatedTemplate> */}
+      <Header
+        userName={accounts.length > 0 ? accounts[0].name : ""}
+        userMail={accounts.length > 0 ? accounts[0].username : ""}
+        logout={handleLogout}
+      ></Header>
+      <MainContent>
+        <Outlet />
+      </MainContent>
+      <Footer></Footer>
+      {/* </AuthenticatedTemplate> */}
     </>
   );
 };

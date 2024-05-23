@@ -5,14 +5,20 @@ export interface File {
   Filename: string;
 }
 
-export const getListOfRequestFiles = async (id: string, token: string) => {
+export const getListOfRequestFiles = async (
+  id: string,
+  stepID: string | undefined,
+  token: string
+) => {
   const headers = {
     Authorization: `Bearer ${token}`,
   };
 
   try {
     const requestData = await axios.get<File[]>(
-      `${import.meta.env.VITE_API}/request/getRequestListOfFiles?id=${id}`,
+      `${
+        import.meta.env.VITE_API
+      }/request/getListOfRequestFiles?id=${id}&stepID=${stepID}`,
       { headers: headers }
     );
 

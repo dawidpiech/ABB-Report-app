@@ -5,22 +5,18 @@ import {
 } from "./RequestStepNavigation.styles";
 import { RequestStep } from "../../api/getListOfRequestSteps";
 import { useState, useEffect, useRef } from "react";
+import { useParams } from "react-router-dom";
 
 interface StepNavigationProps {
   steps: RequestStep[];
-  activeStep: number;
-  handleSetActiveStep: (index: number) => void;
 }
 
-export const RequestStepNavigation = ({
-  steps,
-  activeStep,
-  handleSetActiveStep,
-}: StepNavigationProps) => {
+export const RequestStepNavigation = ({ steps }: StepNavigationProps) => {
   const [isMouseDown, setIsMouseDown] = useState(false);
   const [startX, setStartX] = useState(0);
   const [startScrollLeft, setStartScrollLeft] = useState(0);
   const [hasMovedEnough, setHasMovedEnough] = useState(false);
+  const { stepID } = useParams();
 
   const navigationRef = useRef<HTMLDivElement>(null);
 
@@ -76,11 +72,8 @@ export const RequestStepNavigation = ({
         {steps.map((e, index) => (
           <StepWrapper
             key={index}
-            to={`/request/${e.RequestID}/${e.WorkflowTransitionID}`}
-            onClick={() => {
-              handleSetActiveStep(index);
-            }}
-            $isActive={activeStep === index}
+            to={`/request/${e.RequestID}/${e.RequestActivityID}`}
+            $isActive={String(e.RequestActivityID) === String(stepID)}
           >
             {e.WorkflowTransitionName}
           </StepWrapper>

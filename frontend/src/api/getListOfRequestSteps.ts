@@ -1,6 +1,7 @@
 import axios, { AxiosError } from "axios";
 
 export interface RequestStep {
+  RequestActivityID: string;
   RequestID: string;
   WorkflowID: string;
   WorkflowVariantID: string;

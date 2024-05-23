@@ -20,7 +20,6 @@ import { useAuth } from "../../hooks/useAuth.ts";
 export const RequestPage = () => {
   const params = useParams();
   const [isLoading, setIsLoading] = useState(false);
-  const [activeStep, setActiveStep] = useState(0);
   const [requestData, setRequestData] = useState<{
     data: View[];
     steps: RequestStep[];
@@ -32,10 +31,6 @@ export const RequestPage = () => {
   });
   const throwAsyncError = useThrowAsyncError();
   const { accessToken, accessTokenLoaded } = useAuth();
-
-  const handleSetActiveStep = (index: number) => {
-    setActiveStep(index);
-  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -49,6 +44,7 @@ export const RequestPage = () => {
           );
           const responseFiles = await getListOfRequestFiles(
             params.id,
+            params.stepID,
             accessToken
           );
           const responseSteps =
@@ -70,6 +66,7 @@ export const RequestPage = () => {
             );
             const responseFiles = await getListOfRequestFiles(
               params.id,
+              params.stepID,
               accessToken
             );
             const responseSteps =
@@ -99,11 +96,7 @@ export const RequestPage = () => {
     <LoadingSpinner></LoadingSpinner>
   ) : (
     <>
-      <RequestStepNavigation
-        steps={requestData.steps}
-        activeStep={activeStep}
-        handleSetActiveStep={handleSetActiveStep}
-      ></RequestStepNavigation>
+      <RequestStepNavigation steps={requestData.steps}></RequestStepNavigation>
       <RequestData
         data={requestData.data}
         files={requestData.files}

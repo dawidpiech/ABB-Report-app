@@ -7,7 +7,7 @@ import {
   RequestDataWrapper,
 } from "./RequestData.styles.ts";
 import { ViewData } from "../ViewData/ViewData";
-import { File } from "../../api/getListOfRequestFiles";
+import { File } from "../../api/getListOfRequestFiles.ts";
 
 interface RequestDataProps {
   data: View[];
