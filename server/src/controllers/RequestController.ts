@@ -5,6 +5,7 @@ import {
   listOfStepsRequestQuery,
   ListOfStepsRequestParams,
   requestListOfFilesQuery,
+  requestListOfFilesQueryOnStep,
   RequestListOfFilesParams,
   requestDataOnStepsQuery,
   RequestDataOnStepParams,
@@ -125,40 +126,17 @@ class RequestController {
     }
   }
 
-  //Endpoint responsible for retrieving list of request files
-  public async getFilesOfRequest(
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ): Promise<void> {
-    const params: RequestListOfFilesParams = {
-      id: req.query.id ? validateNumberParam(req.query.id) : undefined,
-    };
-
-    try {
-      if (params.id === undefined) {
-        throw new BadRequestError(`The request must have a Request ID value`);
-      }
-
-      const queryResult = await queryRequestData(
-        requestListOfFilesQuery(params)
-      );
-      const result = queryResult.recordset;
-
-      res.status(200).json(result);
-    } catch (error) {
-      next(error);
-    }
-  }
-
   //Endpoint responsible for retrieving values at each step of the request
-  public async getListOfFilesRequest(
+  public async getListOfRequestFiles(
     req: Request,
     res: Response,
     next: NextFunction
   ): Promise<void> {
     const params: RequestListOfFilesParams = {
       id: req.query.id ? validateNumberParam(req.query.id) : undefined,
+      stepID: req.query.stepID
+        ? validateNumberParam(req.query.stepID)
+        : undefined,
     };
 
     try {
@@ -169,7 +147,9 @@ class RequestController {
       }
 
       const queryResult = await queryRequestData(
-        requestListOfFilesQuery(params)
+        params.stepID === -1
+          ? requestListOfFilesQuery(params)
+          : requestListOfFilesQueryOnStep(params)
       );
       const result = queryResult.recordset;
 

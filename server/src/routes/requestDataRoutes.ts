@@ -15,8 +15,8 @@ requestData.get("/getRequestDataOnStep", (req, res, next) => {
   RequestController.getRequestDataOnStepQuery(req, res, next);
 });
 
-requestData.get("/getRequestListOfFiles", (req, res, next) => {
-  RequestController.getListOfFilesRequest(req, res, next);
+requestData.get("/getListOfRequestFiles", (req, res, next) => {
+  RequestController.getListOfRequestFiles(req, res, next);
 });
 
 requestData.get("/getRequestFile", (req, res, next) => {

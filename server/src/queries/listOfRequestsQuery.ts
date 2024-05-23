@@ -109,7 +109,7 @@ const listOfRequestsQuery = (params: RequestsListQueryParams) => {
       FROM 
         Records
       WHERE 
-        ID BETWEEN ${params.page * 100 - 100} AND ${params.page * 100}
+        ID BETWEEN ${params.page * 100 - 99} AND ${params.page * 100}
       `;
   return listOfRequestsQuery;
 };

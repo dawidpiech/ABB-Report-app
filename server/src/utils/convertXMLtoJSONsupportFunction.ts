@@ -69,13 +69,16 @@ export const compareValue = (field: any, initialField: any): FieldValue[] => {
   let result: FieldValue[] = [];
 
   field.Value.forEach((value: any) => {
-    const parsedValue = typeof value === "string" ? value : value._;
+    const parsedValue =
+      typeof value === "string" ? value : decodeURIComponent(value.$.ValueText);
 
     const mappedInitialFieldValue =
       initialField && initialField.Value !== undefined
         ? typeof initialField.Value[0] === "string"
           ? initialField.Value
-          : initialField.Value.map((value: any) => value._)
+          : initialField.Value.map((value: any) =>
+              decodeURIComponent(value.$.ValueText)
+            )
         : [];
 
     let fieldValue: FieldValue = { value: parsedValue };
@@ -93,6 +96,7 @@ export const compareValue = (field: any, initialField: any): FieldValue[] => {
   if (initialField && initialField.Value.length > 0) {
     initialField.Value.forEach((value: any, index: number) => {
       const parsedValue = typeof value === "string" ? value : value._;
+
       const parsedInitialField =
         initialField && initialField.OldValue !== undefined
           ? typeof initialField.OldValue[0] === "string"
@@ -112,6 +116,7 @@ export const compareValue = (field: any, initialField: any): FieldValue[] => {
       }
     });
   }
+
   return result;
 };
 

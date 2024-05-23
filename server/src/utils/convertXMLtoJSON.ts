@@ -22,13 +22,7 @@ const convertToJSON = async (
   parsedRequestWorkflow.Form.View.forEach((view: any) => {
     const convertedView = convertViewToObject(view, requestValues);
 
-    if (
-      !("HeaderText" in view) ||
-      ("HeaderText" in view && view.HeaderText[0] === "Decisions") ||
-      ("HeaderText" in view &&
-        view.HeaderText[0] === "Configurable Fields - Free to use")
-    )
-      return;
+    if (!("HeaderText" in view)) return;
     result.push(convertedView);
   });
 

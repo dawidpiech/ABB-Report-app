@@ -19,6 +19,7 @@ interface RequestDataOnStepParams {
 
 interface RequestListOfFilesParams {
   id?: number | undefined;
+  stepID?: number | undefined;
 }
 
 interface RequestGetFileParams {
@@ -64,7 +65,8 @@ const listOfStepsRequestQuery = (params: ListOfStepsRequestParams) => {
 	  R.ControlData.value('(/ControlData/WorkflowID/node())[1]','varchar(250)') AS WorkflowID,
 	  R.ControlData.value('(/ControlData/WorkflowVariantID/node())[1]','varchar(250)') AS WorkflowVariantID,
 	  R.WorkflowTransitionID,
-	  W.WorkflowTransitionName
+	  W.WorkflowTransitionName,
+    R.RequestActivityID
     FROM WorkflowRuntime.RequestActivity R
     INNER JOIN WorkflowSpecification.WorkflowTransition W ON
       R.ControlData.value('(/ControlData/WorkflowID/node())[1]','varchar(250)') = W.WorkflowID 
@@ -84,7 +86,7 @@ const requestDataOnStepsQuery = (params: RequestDataOnStepParams) => {
   }
 
   if (params.stepID !== undefined) {
-    conditions.push(`R.WorkflowTransitionID = ${params.stepID}`);
+    conditions.push(`R.RequestActivityID = ${params.stepID}`);
   }
 
   const whereClause =
@@ -105,7 +107,7 @@ const requestDataOnStepsQuery = (params: RequestDataOnStepParams) => {
   return requestDataOnStepsQuery;
 };
 
-//The function responsible for retrieving the request data from selected step
+//The function responsible for retrieving list of files on initial view
 const requestListOfFilesQuery = (params: RequestListOfFilesParams) => {
   const conditions: string[] = [];
 
@@ -127,6 +129,34 @@ const requestListOfFilesQuery = (params: RequestListOfFilesParams) => {
 	  ${whereClause}`;
 
   return requestListOfFilesQuery;
+};
+
+//The function responsible for retrieving the request data from selected step
+const requestListOfFilesQueryOnStep = (params: RequestListOfFilesParams) => {
+  const conditions: string[] = [];
+
+  if (params.id !== undefined) {
+    conditions.push(`RequestID = ${params.id}`);
+  }
+
+  if (params.stepID !== undefined) {
+    conditions.push(`RequestActivityID = ${params.stepID}`);
+  }
+
+  const whereClause =
+    conditions.length > 0 ? `WHERE ${conditions.join(" AND ")}` : "";
+
+  const requestListOfFilesQueryOnStep = `
+    SELECT 
+      ValueNode.value('(text())[1]', 'varchar(250)') AS FileUUID,
+      FileTable.Filename
+    FROM [${process.env.DB_REQUEST_DATA_DB_ADRESS}].[WorkflowRuntime].[RequestActivity]
+    CROSS APPLY FormDataEnd.nodes('/FormData/Field[@ID="REQUEST_DATA_SUPPORTING_DOCUMENTS"]/Value') AS FieldNodes(ValueNode)
+    LEFT JOIN [${process.env.DB_FILE_DB_ADRESS}].[Storage].[File] AS FileTable
+        ON ValueNode.value('(text())[1]', 'varchar(250)') = FileTable.FileUUID
+	  ${whereClause}`;
+
+  return requestListOfFilesQueryOnStep;
 };
 
 //The function responsible for get file from database
@@ -157,6 +187,7 @@ export {
   ListOfStepsRequestParams,
   requestDataOnStepsQuery,
   RequestDataOnStepParams,
+  requestListOfFilesQueryOnStep,
   requestListOfFilesQuery,
   RequestListOfFilesParams,
   requestGetFileQuery,

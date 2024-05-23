@@ -21,7 +21,7 @@ const ExpressConfig = (): Application => {
 
   app.use(cors(corsOptions));
 
-  app.use(authMiddleware);
+  // app.use(authMiddleware);
 
   app.use(bodyParser.json());
 
