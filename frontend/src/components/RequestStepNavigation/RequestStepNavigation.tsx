@@ -1,84 +1,79 @@
 import {
-  RequestStepNavigationWrapper,
-  SlideInfo,
+  RequestStepArrowLeft,
+  RequestStepArrowRight,
+  RequestStepsNavigationWrapper,
+  RequestStepsWrapper,
   StepWrapper,
 } from "./RequestStepNavigation.styles";
 import { RequestStep } from "../../api/getListOfRequestSteps";
-import { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
+import { useRef, useState } from "react";
 
 interface StepNavigationProps {
   steps: RequestStep[];
 }
 
 export const RequestStepNavigation = ({ steps }: StepNavigationProps) => {
-  const [isMouseDown, setIsMouseDown] = useState(false);
-  const [startX, setStartX] = useState(0);
-  const [startScrollLeft, setStartScrollLeft] = useState(0);
-  const [hasMovedEnough, setHasMovedEnough] = useState(false);
   const { stepID } = useParams();
+  const stepWrapperRef = useRef<HTMLAnchorElement>(null);
+  const requestStepsWrapperRef = useRef<HTMLDivElement>(null);
+  const [transformX, setTransformX] = useState<number>(0);
+  const wrapperInnerWidth =
+    (requestStepsWrapperRef.current &&
+      requestStepsWrapperRef.current.offsetWidth) ||
+    1260;
+  const stepWrapperWidth =
+    (stepWrapperRef.current && stepWrapperRef.current.offsetWidth) || 200;
+  const firstTransform =
+    Math.ceil(wrapperInnerWidth / (stepWrapperWidth + 20)) *
+      (stepWrapperWidth + 20) -
+    wrapperInnerWidth -
+    20;
 
-  const navigationRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const handleMouseUp = () => {
-      if (isMouseDown) {
-        setIsMouseDown(false);
-        setHasMovedEnough(false);
-        document.querySelector(".draggable")?.classList.remove("draggable");
-      }
-    };
-
-    document.addEventListener("mouseup", handleMouseUp);
-
-    return () => {
-      document.removeEventListener("mouseup", handleMouseUp);
-    };
-  }, [isMouseDown]);
-
-  const handleMouseDown: React.MouseEventHandler = (e) => {
-    setIsMouseDown(true);
-    setStartX(e.pageX);
-    setStartScrollLeft(e.currentTarget.scrollLeft);
-    e.currentTarget.classList.add("draggable");
+  const onClickArrowRight = () => {
+    transformX === 0
+      ? setTransformX(transformX - firstTransform - 20)
+      : setTransformX(transformX - stepWrapperWidth - 20);
   };
 
-  const handleMouseMove: React.MouseEventHandler = (e) => {
-    if (!isMouseDown) return;
-
-    if (!hasMovedEnough) {
-      const x = e.pageX;
-      if (Math.abs(x - startX) >= 5) {
-        setHasMovedEnough(true);
-      } else {
-        return;
-      }
-    }
-
-    e.preventDefault();
-    const x = e.pageX;
-    const walk = (x - startX) * 2;
-    e.currentTarget.scrollLeft = startScrollLeft - walk;
+  const onClickArrorLeft = () => {
+    Math.abs(transformX) % (stepWrapperWidth + 20) !== 0
+      ? setTransformX(transformX + firstTransform + 20)
+      : setTransformX(transformX + stepWrapperWidth + 20);
   };
 
   return (
     <>
-      <SlideInfo>Click and swipe left to see the remaining steps. </SlideInfo>
-      <RequestStepNavigationWrapper
-        onMouseDown={handleMouseDown}
-        onMouseMove={handleMouseMove}
-        ref={navigationRef}
-      >
-        {steps.map((e, index) => (
-          <StepWrapper
-            key={index}
-            to={`/request/${e.RequestID}/${e.RequestActivityID}`}
-            $isActive={String(e.RequestActivityID) === String(stepID)}
-          >
-            {e.WorkflowTransitionName}
-          </StepWrapper>
-        ))}
-      </RequestStepNavigationWrapper>
+      <RequestStepsNavigationWrapper>
+        <RequestStepArrowLeft
+          onClick={onClickArrorLeft}
+          disabled={transformX === 0}
+        />
+        <RequestStepsWrapper ref={requestStepsWrapperRef}>
+          {steps.map((e, index) => (
+            <StepWrapper
+              ref={stepWrapperRef}
+              transformX={transformX}
+              key={index}
+              to={`/request/${e.RequestID}/${e.RequestActivityID}`}
+              $isActive={String(e.RequestActivityID) === String(stepID)}
+            >
+              {e.WorkflowTransitionName}
+            </StepWrapper>
+          ))}
+        </RequestStepsWrapper>
+        <RequestStepArrowRight
+          onClick={onClickArrowRight}
+          disabled={
+            Math.abs(transformX) + wrapperInnerWidth ===
+              steps.length * (stepWrapperWidth + 20) ||
+            Math.abs(transformX) + wrapperInnerWidth ===
+              steps.length * (stepWrapperWidth + 20) - 20 ||
+            Math.abs(transformX) + wrapperInnerWidth ===
+              steps.length * (stepWrapperWidth + 20) - 19
+          }
+        />
+      </RequestStepsNavigationWrapper>
     </>
   );
 };

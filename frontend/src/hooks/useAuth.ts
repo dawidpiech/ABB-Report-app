@@ -4,7 +4,7 @@ import { loginRequest } from "../config/azureConfig";
 
 export const useAuth = () => {
   const [accessToken, setAccessToken] = useState("");
-  const [accessTokenLoaded, setAccessTokenLoaded] = useState(true);
+  const [accessTokenLoaded, setAccessTokenLoaded] = useState(false);
 
   const { instance, accounts } = useMsal();
 
