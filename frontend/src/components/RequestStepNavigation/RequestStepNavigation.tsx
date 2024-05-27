@@ -7,7 +7,7 @@ import {
 } from "./RequestStepNavigation.styles";
 import { RequestStep } from "../../api/getListOfRequestSteps";
 import { useParams } from "react-router-dom";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 interface StepNavigationProps {
   steps: RequestStep[];
@@ -15,31 +15,45 @@ interface StepNavigationProps {
 
 export const RequestStepNavigation = ({ steps }: StepNavigationProps) => {
   const { stepID } = useParams();
-  const stepWrapperRef = useRef<HTMLAnchorElement>(null);
-  const requestStepsWrapperRef = useRef<HTMLDivElement>(null);
-  const [transformX, setTransformX] = useState<number>(0);
-  const wrapperInnerWidth =
-    (requestStepsWrapperRef.current &&
-      requestStepsWrapperRef.current.offsetWidth) ||
-    1260;
-  const stepWrapperWidth =
-    (stepWrapperRef.current && stepWrapperRef.current.offsetWidth) || 200;
-  const firstTransform =
-    Math.ceil(wrapperInnerWidth / (stepWrapperWidth + 20)) *
-      (stepWrapperWidth + 20) -
-    wrapperInnerWidth -
-    20;
+  const requestStepsWrapperInnerRef = useRef<HTMLDivElement>(null);
+  const [stepsWrapperInnerWidth, setStepsWrapperInnerWidth] =
+    useState<number>(0);
+  const [stepWrapperWidth, setStepWrapperWidth] = useState<number>(0);
+  const [firstTransform, setFirstTransform] = useState<number>(0);
+  const [transformx, setTransformX] = useState<number>(0);
+
+  useEffect(() => {
+    if (
+      requestStepsWrapperInnerRef.current &&
+      requestStepsWrapperInnerRef.current.childNodes[0]
+    ) {
+      const stepWrapper = requestStepsWrapperInnerRef.current
+        .childNodes[0] as HTMLElement;
+      const stepWrapperWidth = stepWrapper.offsetWidth;
+      setStepsWrapperInnerWidth(
+        requestStepsWrapperInnerRef.current.offsetWidth
+      );
+      setStepWrapperWidth(stepWrapperWidth);
+
+      setFirstTransform(
+        Math.ceil(stepsWrapperInnerWidth / (stepWrapperWidth + 20)) *
+          (stepWrapperWidth + 20) -
+          stepsWrapperInnerWidth -
+          20
+      );
+    }
+  }, [requestStepsWrapperInnerRef, stepsWrapperInnerWidth]);
 
   const onClickArrowRight = () => {
-    transformX === 0
-      ? setTransformX(transformX - firstTransform - 20)
-      : setTransformX(transformX - stepWrapperWidth - 20);
+    transformx === 0
+      ? setTransformX(transformx - firstTransform - 20)
+      : setTransformX(transformx - stepWrapperWidth - 20);
   };
 
   const onClickArrorLeft = () => {
-    Math.abs(transformX) % (stepWrapperWidth + 20) !== 0
-      ? setTransformX(transformX + firstTransform + 20)
-      : setTransformX(transformX + stepWrapperWidth + 20);
+    Math.abs(transformx) % (stepWrapperWidth + 20) !== 0
+      ? setTransformX(transformx + firstTransform + 20)
+      : setTransformX(transformx + stepWrapperWidth + 20);
   };
 
   return (
@@ -47,13 +61,12 @@ export const RequestStepNavigation = ({ steps }: StepNavigationProps) => {
       <RequestStepsNavigationWrapper>
         <RequestStepArrowLeft
           onClick={onClickArrorLeft}
-          disabled={transformX === 0}
+          disabled={transformx === 0}
         />
-        <RequestStepsWrapper ref={requestStepsWrapperRef}>
+        <RequestStepsWrapper ref={requestStepsWrapperInnerRef}>
           {steps.map((e, index) => (
             <StepWrapper
-              ref={stepWrapperRef}
-              transformX={transformX}
+              transformx={transformx}
               key={index}
               to={`/request/${e.RequestID}/${e.RequestActivityID}`}
               $isActive={String(e.RequestActivityID) === String(stepID)}
@@ -65,12 +78,10 @@ export const RequestStepNavigation = ({ steps }: StepNavigationProps) => {
         <RequestStepArrowRight
           onClick={onClickArrowRight}
           disabled={
-            Math.abs(transformX) + wrapperInnerWidth ===
+            Math.abs(transformx) + stepsWrapperInnerWidth >=
               steps.length * (stepWrapperWidth + 20) ||
-            Math.abs(transformX) + wrapperInnerWidth ===
-              steps.length * (stepWrapperWidth + 20) - 20 ||
-            Math.abs(transformX) + wrapperInnerWidth ===
-              steps.length * (stepWrapperWidth + 20) - 19
+            Math.abs(transformx) + stepsWrapperInnerWidth >=
+              steps.length * (stepWrapperWidth + 20) - 20
           }
         />
       </RequestStepsNavigationWrapper>

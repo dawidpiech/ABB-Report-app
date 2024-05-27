@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 interface StepWrapperProps {
   $isActive: boolean;
-  transformX: number;
+  transformx: number;
 }
 
 export const RequestStepsNavigationWrapper = styled.div`
@@ -27,7 +27,7 @@ export const RequestStepsWrapper = styled.div`
 
 export const StepWrapper = styled(Link)<StepWrapperProps>`
   transition: 0.5s ease-out;
-  transform: ${(props) => `translateX(${props.transformX}px)`};
+  transform: ${(props) => `translateX(${props.transformx}px)`};
   flex: 1 0 200px;
   text-decoration: none;
   color: ${({ theme }) => theme.colors.black};

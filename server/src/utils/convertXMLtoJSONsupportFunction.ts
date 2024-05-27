@@ -76,9 +76,11 @@ export const compareValue = (field: any, initialField: any): FieldValue[] => {
       initialField && initialField.Value !== undefined
         ? typeof initialField.Value[0] === "string"
           ? initialField.Value
-          : initialField.Value.map((value: any) =>
-              decodeURIComponent(value.$.ValueText)
-            )
+          : initialField.Value.map((value: any) => {
+              value.$ && value.$.ValueText
+                ? decodeURIComponent(value.$.ValueText)
+                : value._;
+            })
         : [];
 
     let fieldValue: FieldValue = { value: parsedValue };
