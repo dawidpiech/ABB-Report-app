@@ -13,7 +13,7 @@ interface FieldProps {
 export const TextArea = ({ value }: FieldProps) => {
   return (
     <>
-      <StyledLabel>{value.nameOfField}:</StyledLabel>
+      <StyledLabel>{value.name}:</StyledLabel>
       <StyledValue>
         <p>{value.values[0].value}</p>
         {value.values[0].isModified ? (

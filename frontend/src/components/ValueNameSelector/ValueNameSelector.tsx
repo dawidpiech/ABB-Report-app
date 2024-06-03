@@ -13,7 +13,7 @@ interface FieldProps {
 export const ValueNameSelector = ({ value }: FieldProps) => {
   return (
     <>
-      <StyledLabel>{value.nameOfField}:</StyledLabel>
+      <StyledLabel>{value.name}:</StyledLabel>
       <StyledValue>
         <select disabled>
           <option>{value.values[0].value}</option>

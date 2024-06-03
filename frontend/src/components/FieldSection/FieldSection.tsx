@@ -18,7 +18,7 @@ export const FieldSection = ({ fields, files }: FieldSectionProps) => {
     <>
       {fields.map((field, index) => {
         if (
-          field.nameOfField === "" ||
+          field.name === "" ||
           (field.values &&
             field.values.length === 1 &&
             field.values[0].value === "")

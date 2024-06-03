@@ -48,11 +48,11 @@ export const RequestData = ({ data, files }: RequestDataProps) => {
         {data.map((e, index) =>
           viewHaveValuesList[index] ? (
             <RequestDataMenuElement
-              key={`${index}: ${e.nameOfView}`}
+              key={`${index}: ${e.name}`}
               onClick={() => handleTabClick(index)}
               $isActive={activeTab === index}
             >
-              {e.nameOfView}
+              {e.name}
             </RequestDataMenuElement>
           ) : null
         )}

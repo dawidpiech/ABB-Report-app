@@ -11,12 +11,14 @@ import {
   RequestDataOnStepParams,
   RequestGetFileParams,
   requestGetFileQuery,
+  configurationFieldsQuery,
 } from "../queries/requestDataQuery";
 import dotenv from "dotenv";
 import { validateNumberParam } from "../utils/validation";
 import { BadRequestError } from "../erros/BadRequestError";
-import { convertToJSON } from "../utils/convertXMLtoJSON";
 import { queryRequestData, queryFileData } from "../config/configDatabase";
+import { parseXml } from "../utils/parseXMLtoJSON";
+import { mergeFormWithValues } from "../utils/mergeFormWithValues";
 
 dotenv.config();
 
@@ -40,11 +42,21 @@ class RequestController {
 
       const queryResult = await queryRequestData(requestDataQuery(params));
       const request = queryResult.recordset;
+      const parsedControlDataXml = await parseXml(request[0].ControlData);
+      const fieldsConfigurationQueryResult = await queryRequestData(
+        configurationFieldsQuery({
+          workflowID: parsedControlDataXml.ControlData.WorkflowID[0],
+          workflowVariantID:
+            parsedControlDataXml.ControlData.WorkflowVariantID[0],
+        })
+      );
+      const fieldsConfigurationList = fieldsConfigurationQueryResult.recordset;
 
-      const result = await convertToJSON(
+      const result = await mergeFormWithValues(
         request[0].FormSpecification,
         request[0].FormData,
-        request[0].InitialFormData
+        request[0].InitialFormData,
+        fieldsConfigurationList
       );
 
       res.status(200).json(result);
@@ -111,13 +123,23 @@ class RequestController {
         requestDataOnStepsQuery(params)
       );
       const request = queryResult.recordset;
+      const parsedControlDataXml = await parseXml(request[0].ControlData);
+      const fieldsConfigurationQueryResult = await queryRequestData(
+        configurationFieldsQuery({
+          workflowID: parsedControlDataXml.ControlData.WorkflowID[0],
+          workflowVariantID:
+            parsedControlDataXml.ControlData.WorkflowVariantID[0],
+        })
+      );
+      const fieldsConfigurationList = fieldsConfigurationQueryResult.recordset;
 
-      const result = await convertToJSON(
+      const result = await mergeFormWithValues(
         request[0].FormSpecification,
         request[0].FormDataEnd
           ? request[0].FormDataEnd
           : request[0].FormDataStart,
-        request[0].InitialFormData
+        request[0].InitialFormData,
+        fieldsConfigurationList
       );
 
       res.status(200).json(result);

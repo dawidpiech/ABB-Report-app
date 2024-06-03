@@ -6,6 +6,8 @@ export const StyledLabel = styled.label`
 `;
 
 export const StyledValue = styled.div`
+  display: flex;
+  align-items: center;
   margin-left: 30px;
   width: 60%;
 `;

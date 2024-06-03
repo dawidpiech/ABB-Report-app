@@ -15,7 +15,7 @@ interface FieldProps {
 export const MultiChoiceList = ({ value }: FieldProps) => {
   return (
     <>
-      <StyledLabel>{value.nameOfField}:</StyledLabel>
+      <StyledLabel>{value.name}:</StyledLabel>
       <StyledValue>
         {value.values.map((value, index) => (
           <StyledInputCheckboxWraper key={index}>

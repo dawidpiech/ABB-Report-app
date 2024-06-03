@@ -13,7 +13,7 @@ interface FieldProps {
 export const SingleLineTextField = ({ value }: FieldProps) => {
   return (
     <>
-      <StyledLabel>{value.nameOfField}:</StyledLabel>
+      <StyledLabel>{value.name}:</StyledLabel>
       {value.values ? (
         <StyledValue>
           {value.values[0].value}

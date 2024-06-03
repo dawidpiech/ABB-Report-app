@@ -20,9 +20,7 @@ export const TableSection = ({ data }: TableSectionProps) => {
         <TableSectionThead>
           <TableSectionTr $background={true}>
             {data.map((comlumName, index) => (
-              <TableSectionTh key={index}>
-                {comlumName.nameOfField}
-              </TableSectionTh>
+              <TableSectionTh key={index}>{comlumName.name}</TableSectionTh>
             ))}
           </TableSectionTr>
         </TableSectionThead>

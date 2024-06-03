@@ -1,23 +1,23 @@
 import axios, { AxiosError } from "axios";
 
 export interface View {
-  nameOfView: string;
+  name: string;
   groups: Group[];
 }
 
 export interface Group {
-  nameOfGroup: string;
+  name: string;
   sections: Section[];
 }
 
 export interface Section {
   typeOfSection: string;
-  nameOfSection: string;
+  name: string;
   fields: Field[];
 }
 
 export interface Field {
-  nameOfField: string;
+  name: string;
   typeOfField: string;
   values: Value[];
 }

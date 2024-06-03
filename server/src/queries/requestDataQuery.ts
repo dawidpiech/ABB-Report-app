@@ -8,6 +8,11 @@ interface RequestDataParams {
   requestValues?: string;
 }
 
+interface ConfigurationFieldsParams {
+  workflowID: number;
+  workflowVariantID: number;
+}
+
 interface ListOfStepsRequestParams {
   id?: number | undefined;
 }
@@ -40,12 +45,37 @@ const requestDataQuery = (params: RequestDataParams) => {
   const requestDataQuery = `
     SELECT R.RequestID,
 	    W.FormSpecification,
+      R.ControlData,
       R.FormData,
       R.InitialFormData
     FROM WorkflowRuntime.Request R
     INNER JOIN WorkflowSpecification.Workflow W ON R.WorkflowID = W.WorkflowID AND R.WorkflowVariantID = W.WorkflowVariantID 
     ${whereClause}
     ORDER BY R.RequestID ASC`;
+  return requestDataQuery;
+};
+
+//The function responsible for retrieving the configuration fields labels
+const configurationFieldsQuery = (params: ConfigurationFieldsParams) => {
+  const conditions: string[] = [];
+
+  if (params.workflowVariantID !== undefined) {
+    conditions.push(`WorkflowVariantID = ${params.workflowVariantID}`);
+  }
+
+  if (params.workflowID !== undefined) {
+    conditions.push(`WorkflowID = ${params.workflowID}`);
+  }
+
+  const whereClause =
+    conditions.length > 0 ? `WHERE ${conditions.join(" AND ")}` : "";
+
+  const requestDataQuery = `
+    SELECT Type,
+    ID,
+    Text
+    FROM WorkflowSpecification.WorkflowText
+    ${whereClause}`;
   return requestDataQuery;
 };
 
@@ -97,6 +127,7 @@ const requestDataOnStepsQuery = (params: RequestDataOnStepParams) => {
 	  W.FormSpecification,
 	  R.FormDataEnd,
     R.FormDataStart,
+    R.ControlData,
 	  R2.InitialFormData
     FROM WorkflowRuntime.RequestActivity R
     LEFT JOIN WorkflowSpecification.Workflow W ON R.ControlData.value('(/ControlData/WorkflowID/node())[1]','varchar(250)') = W.WorkflowID 
@@ -192,4 +223,6 @@ export {
   RequestListOfFilesParams,
   requestGetFileQuery,
   RequestGetFileParams,
+  configurationFieldsQuery,
+  ConfigurationFieldsParams,
 };

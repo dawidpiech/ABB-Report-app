@@ -64,7 +64,7 @@ export const FileUpload = ({ value, listOfFiles }: FieldProps) => {
   return (
     <ErrorBoundary>
       <StyledFileUploadWrapper>
-        <StyledLabel>{value.nameOfField}:</StyledLabel>
+        <StyledLabel>{value.name}:</StyledLabel>
         <StyledValue>
           {listOfFiles.map((file, index) => (
             <StyledFile

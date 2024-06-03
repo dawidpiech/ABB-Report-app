@@ -30,10 +30,10 @@ export const GroupData = ({ group, files }: GroupDataProps) => {
     return (
       <>
         <GroupDataWrapper>
-          {group.nameOfGroup ? <p>{group.nameOfGroup}</p> : ""}
+          {group.name ? <p>{group.name}</p> : ""}
           {group.sections.map((section, index) => (
             <SectionDataWrapper key={index}>
-              {section.nameOfSection ? <h5>{section.nameOfSection}</h5> : ""}
+              {section.name ? <h5>{section.name}</h5> : ""}
               {section.typeOfSection === "Field" ? (
                 <FieldSection fields={section.fields} files={files} />
               ) : (

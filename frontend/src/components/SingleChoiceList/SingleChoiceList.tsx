@@ -13,7 +13,7 @@ interface FieldProps {
 export const SingleChoiceList = ({ value }: FieldProps) => {
   return (
     <>
-      <StyledLabel>{value.nameOfField}:</StyledLabel>
+      <StyledLabel>{value.name}:</StyledLabel>
       <StyledValue>
         <StyledRadio></StyledRadio>
         <span>{value.values ? value.values[0].value : ""}</span>
