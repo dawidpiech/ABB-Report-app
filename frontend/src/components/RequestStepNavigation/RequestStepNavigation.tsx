@@ -23,12 +23,15 @@ export const RequestStepNavigation = ({ steps }: StepNavigationProps) => {
   const [transformx, setTransformX] = useState<number>(0);
 
   useEffect(() => {
+    console.log(requestStepsWrapperInnerRef.current);
+
     if (
       requestStepsWrapperInnerRef.current &&
       requestStepsWrapperInnerRef.current.childNodes[0]
     ) {
       const stepWrapper = requestStepsWrapperInnerRef.current
         .childNodes[0] as HTMLElement;
+
       const stepWrapperWidth = stepWrapper.offsetWidth;
       setStepsWrapperInnerWidth(
         requestStepsWrapperInnerRef.current.offsetWidth
@@ -42,10 +45,10 @@ export const RequestStepNavigation = ({ steps }: StepNavigationProps) => {
           20
       );
     }
-  }, [requestStepsWrapperInnerRef, stepsWrapperInnerWidth]);
+  }, [steps, stepsWrapperInnerWidth]);
 
   const onClickArrowRight = () => {
-    transformx === 0
+    transformx === 0 || transformx % (stepWrapperWidth + 20) === 0
       ? setTransformX(transformx - firstTransform - 20)
       : setTransformX(transformx - stepWrapperWidth - 20);
   };

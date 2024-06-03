@@ -92,15 +92,17 @@ export const RequestPage = () => {
     if (accessTokenLoaded) fetchData();
   }, [params, accessTokenLoaded]);
 
-  return isLoading ? (
-    <LoadingSpinner></LoadingSpinner>
-  ) : (
+  return (
     <>
       <RequestStepNavigation steps={requestData.steps}></RequestStepNavigation>
-      <RequestData
-        data={requestData.data}
-        files={requestData.files}
-      ></RequestData>
+      {isLoading ? (
+        <LoadingSpinner></LoadingSpinner>
+      ) : (
+        <RequestData
+          data={requestData.data}
+          files={requestData.files}
+        ></RequestData>
+      )}
     </>
   );
 };
