@@ -23,8 +23,6 @@ export const RequestStepNavigation = ({ steps }: StepNavigationProps) => {
   const [transformx, setTransformX] = useState<number>(0);
 
   useEffect(() => {
-    console.log(requestStepsWrapperInnerRef.current);
-
     if (
       requestStepsWrapperInnerRef.current &&
       requestStepsWrapperInnerRef.current.childNodes[0]
